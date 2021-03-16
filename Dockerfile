@@ -8,8 +8,8 @@ RUN apt-get update; \
 
 RUN mkdir /api
 
-COPY target/yuuvis-v-api-1.0-SNAPSHOT-fat.jar /api/app.jar
+COPY target/yuuvis-v-api-1.3-SNAPSHOT-fat.jar /api/app.jar
 
 USER 1001
 
-CMD [ "java", "-jar", "/opt/adapter/app.jar"]
+CMD [ "java", "-jar", "/api/app.jar"]
