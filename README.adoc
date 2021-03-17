@@ -110,5 +110,11 @@ edit version in pom
 mvn clean install
 edit the Dockerfile - put in the version
 mvn clean deploy
+
+docker secret:
+helm install nexus --generate-name
+
 edit the version in api helm - deployment.yaml in the image:
-helm install api --generate-name
+helm install yuuvis-v-api api
+
+helm uninstall yuuvis-v-api
