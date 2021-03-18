@@ -7,7 +7,7 @@ public class MainVerticle extends AbstractVerticle {
   @Override
   public void start() {
     vertx.createHttpServer()
-        .requestHandler(req -> req.response().end("Hello Optimal Systems - yuuvis is calling"))
+        .requestHandler(req -> req.response().end("Hello Optimal Systems - yuuvis 1.4 is calling"))
         .listen(8080);
   }
 
