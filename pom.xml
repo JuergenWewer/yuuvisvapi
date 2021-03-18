@@ -10,7 +10,7 @@
   <version>1.3-SNAPSHOT</version>
 
   <properties>
-    <dockerrepository>10.211.55.4:32132</dockerrepository>
+    <dockerrepository>10.0.1.51:32132</dockerrepository>
     <vertx.version>4.0.0</vertx.version>
     <main.verticle>io.vertx.starter.MainVerticle</main.verticle>
   </properties>
@@ -19,12 +19,12 @@
     <snapshotRepository>
       <id>optimal-maven-snapshots</id>
       <name>optimal-maven-snapshots</name>
-      <url>http://10.211.55.4:32000/repository/maven-snapshots/</url>
+      <url>http://10.0.1.51:32000/repository/maven-snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>optimal-maven-releases</id>
       <name>optimal-maven-releases</name>
-      <url>http://10.211.55.4:32000/repository/maven-releases/</url>
+      <url>http://10.0.1.51:32000/repository/maven-releases/</url>
     </repository>
   </distributionManagement>
 
