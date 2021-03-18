@@ -41,6 +41,8 @@ mvn clean deploy -Ddocker.user=<username> -Ddocker.password=<passwd> -Ddocker.ur
 mvn clean deploy -Ddocker.user=admin -Ddocker.password=admin123 -Ddocker.url=http://10.211.55.4:32132
 
 curl -v -u admin:admin123 --upload-file /Users/wewer/workspace/yuuvisvapi/target/yuuvis-v-api-1.2-SNAPSHOT.jar http://10.211.55.4:32000/repository/maven-snapshots/juergenwewer/optimal/yuuvis-v-api/1.2-SNAPSHOT/yuuvis-v-api-1.2-SNAPSHOT.jar
+curl -v -u admin:admin123 --upload-file /home/jwewer/workspace/yuuvisvapi/target/yuuvis-v-api-1.3-SNAPSHOT.jar http://10.0.1.51:32000/repository/maven-snapshots/juergenwewer/optimal/yuuvis-v-api/1.3-SNAPSHOT/yuuvis-v-api-1.3-SNAPSHOT.jar
+
 
 docker login http://10.211.55.4:32132
 3. docker image ls
