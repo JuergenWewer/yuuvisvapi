@@ -69,6 +69,7 @@ systemctl restart docker
 check with docker info:
 
 docker login http://10.211.55.4:32132
+sudo docker login http://10.0.1.51:32132
 
 cat ~/.docker/config.json
 
@@ -109,9 +110,9 @@ http://10.211.55.4:30127/ in the Browser
 new:
 
 edit version in pom
-mvn clean install
+sudo mvn clean install
 edit the Dockerfile - put in the version
-mvn clean deploy
+sudo mvn clean deploy
 
 docker secret:
 helm install nexus --generate-name
