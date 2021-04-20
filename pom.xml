@@ -7,24 +7,25 @@
 
   <groupId>juergenwewer.optimal</groupId>
   <artifactId>yuuvis-v-api</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.5-SNAPSHOT</version>
 
   <properties>
-    <dockerrepository>10.0.1.51:32132</dockerrepository>
-    <vertx.version>4.0.0</vertx.version>
-    <main.verticle>io.vertx.starter.MainVerticle</main.verticle>
+    <dockerrepository>10.211.55.4:32132</dockerrepository>
+    <vertx.version>4.0.3</vertx.version>
+    <junit-jupiter.version>5.7.0</junit-jupiter.version>
+    <main.verticle>io.vertx.starter.ApiVerticle</main.verticle>
   </properties>
 
   <distributionManagement>
     <snapshotRepository>
       <id>optimal-maven-snapshots</id>
       <name>optimal-maven-snapshots</name>
-      <url>http://10.0.1.51:32000/repository/maven-snapshots/</url>
+      <url>http://10.211.55.4:32000/repository/maven-snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>optimal-maven-releases</id>
       <name>optimal-maven-releases</name>
-      <url>http://10.0.1.51:32000/repository/maven-releases/</url>
+      <url>http://10.211.55.4:32000/repository/maven-releases/</url>
     </repository>
   </distributionManagement>
 
@@ -46,15 +47,52 @@
       <artifactId>vertx-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-unit</artifactId>
+      <artifactId>vertx-web-openapi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-api-contract</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver-dns-native-macos</artifactId>
+      <version>4.1.63.Final</version>
+      <classifier>osx-x86_64</classifier>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-junit5</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.12</version>
     </dependency>
   </dependencies>
 
@@ -73,6 +111,19 @@
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.21.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.2.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>

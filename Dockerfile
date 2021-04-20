@@ -8,7 +8,7 @@ RUN apt-get update; \
 
 RUN mkdir /api
 
-COPY target/yuuvis-v-api-1.4-SNAPSHOT-fat.jar /api/app.jar
+COPY target/yuuvis-v-api-1.5-SNAPSHOT-fat.jar /api/app.jar
 
 USER 1001
 
