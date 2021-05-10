@@ -1,0 +1,119 @@
+{
+  "objects": [
+    {
+      "properties": {
+        "system:traceId": {
+          "value": "e9759a4e90730544"
+        },
+        "tenYuuvistest:vorname": {
+          "value": "vornameleistungsempfaenger"
+        },
+        "tenYuuvistest:id": {
+          "value": "idleistungsempfaenger"
+        },
+        "tenYuuvistest:nachnameUnterhaltspflichtiger": {
+          "value": "nachnameunterhaltspflichtiger"
+        },
+        "appClient:clienttitle": {
+          "value": "vornameleistungsempfaenger, nachnameleistungsempfaenger"
+        },
+        "system:creationDate": {
+          "value": "2021-04-22T09:11:47.630Z"
+        },
+        "system:lastModificationDate": {
+          "value": "2021-04-22T09:11:47.630Z"
+        },
+        "tenYuuvistest:aktenzeichen": {
+          "value": "aktenzeichenValue"
+        },
+        "tenYuuvistest:idAntragsteller": {
+          "value": "idantragssteller"
+        },
+        "appClient:clientdescription": {
+          "value": "2002-03-21"
+        },
+        "system:baseTypeId": {
+          "value": "system:folder"
+        },
+        "tenYuuvistest:nachnameAntragsteller": {
+          "value": "nachnameantragssteller"
+        },
+        "tenYuuvistest:geburtsdatum": {
+          "value": "2002-03-21"
+        },
+        "tenYuuvistest:vornameUnterhaltspflichtiger": {
+          "value": "vornameunterhaltspflichtiger"
+        },
+        "system:lastModifiedBy": {
+          "value": "d90b12d5-1288-4a73-92fc-d9b6872df812"
+        },
+        "system:objectTypeId": {
+          "value": "tenYuuvistest:fallakteneo"
+        },
+        "system:secondaryObjectTypeIds": {
+          "value": [
+            "appClientsystem:leadingType",
+            "appClient:clientdefaults"
+          ]
+        },
+        "tenYuuvistest:geburtsdatumUnterhaltspflichtiger": {
+          "value": "2002-03-21"
+        },
+        "tenYuuvistest:archivieren": {
+          "value": true
+        },
+        "system:versionNumber": {
+          "value": 1
+        },
+        "tenYuuvistest:geburtsdatumAntragsteller": {
+          "value": "2002-03-21"
+        },
+        "tenYuuvistest:vornameAntragsteller": {
+          "value": "vornameantragssteller"
+        },
+        "tenYuuvistest:loeschen": {
+          "value": false
+        },
+        "system:createdBy": {
+          "value": "d90b12d5-1288-4a73-92fc-d9b6872df812"
+        },
+        "tenYuuvistest:archivdatum": {
+          "value": "2021-02-18"
+        },
+        "tenYuuvistest:nachname": {
+          "value": "nachnameleistungsempfaenger"
+        },
+        "tenYuuvistest:sachbearbeiter": {
+          "value": "zustaendigerSachbearbeiterValue"
+        },
+        "system:tenant": {
+          "value": "yuuvistest"
+        },
+        "tenYuuvistest:idUnterhaltspflichtiger": {
+          "value": "idunterhaltspflichtiger"
+        },
+        "tenYuuvistest:loeschdatum": {
+          "value": "2024-02-18"
+        },
+        "tenYuuvistest:Bemerkung": {
+          "value": "bemerkungValue"
+        },
+        "tenYuuvistest:eaktenid": {
+          "value": "eAktenID1234"
+        },
+        "tenYuuvistest:vorgangsid": {
+          "value": "id1"
+        },
+        "tenYuuvistest:rechtsgebiet": {
+          "value": "rechtsgebietValue"
+        },
+        "system:objectId": {
+          "value": "82680414-e352-4e98-a681-c41bdb22a81c"
+        }
+      }
+    }
+  ],
+  "numItems": 1,
+  "hasMoreItems": false,
+  "totalNumItems": 1
+}

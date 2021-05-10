@@ -7,13 +7,14 @@
 
   <groupId>juergenwewer.optimal</groupId>
   <artifactId>yuuvis-v-api</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.9.6-SNAPSHOT</version>
 
   <properties>
     <dockerrepository>10.211.55.4:32132</dockerrepository>
     <vertx.version>4.0.3</vertx.version>
     <junit-jupiter.version>5.7.0</junit-jupiter.version>
     <main.verticle>io.vertx.starter.ApiVerticle</main.verticle>
+<!--    <main.verticle>io.vertx.starter.MainVerticle</main.verticle>-->
   </properties>
 
   <distributionManagement>

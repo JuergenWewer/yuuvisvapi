@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yuuvis-api
+  namespace: yuuvis
 spec:
   replicas: 1
   selector:
@@ -14,8 +15,8 @@ spec:
     spec:
       containers:
       - name: yuuvis-api
-        image: 10.211.55.4:32132/yuuvis-v-api:1.4-SNAPSHOT
+        image: 10.211.55.4:32132/yuuvis-v-api:1.9.6-SNAPSHOT
         ports:
         - containerPort: 8080
       imagePullSecrets:
-        - name: regcredoptimal
+        - name: regcred
