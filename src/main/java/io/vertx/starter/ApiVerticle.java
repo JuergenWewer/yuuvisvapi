@@ -91,7 +91,7 @@ public class ApiVerticle extends AbstractVerticle {
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(sr -> {
               HttpResponse<Buffer> responseQuery = sr;
-              System.out.println("Received yuuvis Query response with status code: " + responseQuery.statusCode() + " " + responseQuery.statusMessage());
+              System.out.println("Received yuuvis Query response with statuscode: " + responseQuery.statusCode() + " " + responseQuery.statusMessage());
               System.out.println("Received yuuvis Query response with body: " + responseQuery.bodyAsString());
               JsonObject yuuvisSearch = new JsonObject(responseQuery.bodyAsString());
               int results = yuuvisSearch.getInteger("numItems");
