@@ -3,12 +3,12 @@
         <server>
             <id>optimal-maven-snapshots</id>
             <username>admin</username>
-            <password>admin123</password>
+            <password>admin123jwabcdef</password>
         </server>
         <server>
             <id>optimal-maven-releases</id>
             <username>admin</username>
-            <password>admin123</password>
+            <password>admin123jwabcdef</password>
         </server>
     </servers>
     <profiles>
@@ -21,12 +21,12 @@
                 <repository>
                     <id>optimal-maven-snapshots</id>
                     <name>optimal-maven-snapshots</name>
-                    <url>http://10.0.1.51:32000/repository/maven-snapshots/</url>
+                    <url>https://jw-cloud.org/repository/maven-snapshots/</url>
                 </repository>
                 <repository>
                     <id>optimal-maven-releases</id>
                     <name>optimal-maven-releases</name>
-                    <url>http://10.0.1.51:32000/repository/maven-releases/</url>
+                    <url>https://jw-cloud.org/repository/maven-releases/</url>
                 </repository>
             </repositories>
         </profile>

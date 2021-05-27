@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: yuuvis-api
-        image: 10.211.55.4:32132/yuuvis-v-api:1.9.6-SNAPSHOT
+        image: jw-cloud.org:18443/yuuvis-v-api:2.0.0-SNAPSHOT
         ports:
         - containerPort: 8080
       imagePullSecrets:
-        - name: regcred
+        - name: jwcloudcred

@@ -7,10 +7,10 @@
 
   <groupId>juergenwewer.optimal</groupId>
   <artifactId>yuuvis-v-api</artifactId>
-  <version>1.9.6-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
 
   <properties>
-    <dockerrepository>10.211.55.4:32132</dockerrepository>
+    <dockerrepository>jw-cloud.org:18443</dockerrepository>
     <vertx.version>4.0.3</vertx.version>
     <junit-jupiter.version>5.7.0</junit-jupiter.version>
     <main.verticle>io.vertx.starter.ApiVerticle</main.verticle>
@@ -21,12 +21,12 @@
     <snapshotRepository>
       <id>optimal-maven-snapshots</id>
       <name>optimal-maven-snapshots</name>
-      <url>http://10.211.55.4:32000/repository/maven-snapshots/</url>
+      <url>https://jw-cloud.org/repository/maven-snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>optimal-maven-releases</id>
       <name>optimal-maven-releases</name>
-      <url>http://10.211.55.4:32000/repository/maven-releases/</url>
+      <url>https://jw-cloud.org/repository/maven-releases/</url>
     </repository>
   </distributionManagement>
 
@@ -211,27 +211,6 @@
             </configuration>
           </execution>
 
-          <!-- Login and Push the image to a docker repo. -->
-<!--          <execution>-->
-<!--            <id>docker-login</id>-->
-<!--            <phase>install</phase>-->
-<!--            <goals>-->
-<!--              <goal>exec</goal>-->
-<!--            </goals>-->
-
-<!--            <configuration>-->
-<!--              <executable>docker</executable>-->
-<!--              <workingDirectory>${project.basedir}</workingDirectory>-->
-<!--              <arguments>-->
-<!--                <argument>login</argument>-->
-<!--                <argument>-u</argument>-->
-<!--&lt;!&ndash;                <argument>${docker.user}</argument>&ndash;&gt;-->
-<!--                <argument>-p</argument>-->
-<!--&lt;!&ndash;                <argument>${docker.password}</argument>&ndash;&gt;-->
-<!--&lt;!&ndash;                <argument>${docker.url}</argument>&ndash;&gt;-->
-<!--              </arguments>-->
-<!--            </configuration>-->
-<!--          </execution>-->
           <execution>
             <id>docker-push</id>
             <phase>deploy</phase>
@@ -243,7 +222,6 @@
               <workingDirectory>${project.basedir}</workingDirectory>
               <arguments>
                 <argument>push</argument>
-<!--                <argument>10.211.55.4:32132/yuuvis-v-api:1.1-SNAPSHOT</argument>-->
                 <argument>${dockerrepository}/${project.artifactId}:${project.version}</argument>
               </arguments>
             </configuration>

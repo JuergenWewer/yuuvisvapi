@@ -28,11 +28,11 @@ public class ApiVerticleTest {
   private CountDownLatch producerReadyLatch = new CountDownLatch(1);
   private static Vertx vertx = Vertx.vertx();
 
-//  private String apiurl = "localhost";
-//  private int apiport = 8080;
+  private String apiurl = "localhost";
+  private int apiport = 8080;
 
-  private String apiurl = "10.211.55.4";
-  private int apiport = 31367;
+//  private String apiurl = "10.211.55.4";
+//  private int apiport = 31367;
 
 
   @BeforeEach
@@ -48,8 +48,9 @@ public class ApiVerticleTest {
     }));
   }
 
+
   @Test
-  void testGET(VertxTestContext testContext) throws Throwable {
+  void testKlientakteGET(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       WebClientOptions options = new WebClientOptions()
         .setUserAgent("otto");
@@ -57,15 +58,15 @@ public class ApiVerticleTest {
       System.out.println("start the webclient: testGET");
       WebClient client = WebClient.create(this.vertx, options);
       client
-        .get(apiport, apiurl, "/api/Dokument")
+        .get(apiport, apiurl, "/api/Klientakte/Klientid")
         .basicAuthentication("yuuvis", "optimalsystem")
-        .addQueryParam("eDokumentenID", "4711")
         .send()
         .onSuccess(ar -> {
           HttpResponse<Buffer> response = ar;
           System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
           testContext.completeNow();
-          })
+        })
         .onFailure(err -> {
           System.out.println("GET Something went wrong " + err.getMessage());
           testContext.completeNow();
@@ -74,45 +75,115 @@ public class ApiVerticleTest {
   }
 
   @Test
-  void testFallaktePOST(VertxTestContext testContext) throws Throwable {
+  void testKlientaktePOST(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testKlientaktePOST");
+      JsonObject klientAkte = new JsonObject();
+      klientAkte.put("eAktenID","eAktenID1234");
+      JsonObject klient = new JsonObject();
+      klient.put("vorname","vorname");
+      klient.put("nachname","nachname");
+      klient.put("id","Klientid");
+      klient.put("geburtsdatum","2003-02-18");
+      klient.put("adresse","adresse");
+      klientAkte.put("klient", klient);
+      klientAkte.put("archivieren","true");
+      klientAkte.put("archivierenDatum","2024-02-18");
+      klientAkte.put("loeschen","false");
+      klientAkte.put("loeschenDatum","2024-02-18");
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .post(apiport, apiurl, "/api/Klientakte")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendJsonObject(klientAkte)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testKlientaktePUT(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testKlientaktePUT");
+      JsonObject klientAkte = new JsonObject();
+      klientAkte.put("eAktenID","eAktenID1234");
+      JsonObject klient = new JsonObject();
+      klient.put("vorname","Jürgen");
+      klient.put("nachname","Schulz");
+      klient.put("id","Klientid");
+      klient.put("geburtsdatum","2003-02-18");
+      klient.put("adresse","adresse");
+      klientAkte.put("klient", klient);
+      klientAkte.put("archivieren","true");
+      klientAkte.put("archivierenDatum","2024-02-18");
+      klientAkte.put("loeschen","false");
+      klientAkte.put("loeschenDatum","2024-02-18");
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .put(apiport, apiurl, "/api/Klientakte")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendJsonObject(klientAkte)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testFallakteGET(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testGET");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Fallakte/Akte1")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testFallaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       WebClientOptions options = new WebClientOptions()
         .setUserAgent("otto");
       options.setKeepAlive(false);
       System.out.println("start the webclient: testFallaktePOST");
-      JsonObject fallAkte = new JsonObject("{\n" +
-        "  \"eAktenID\": \"string\",\n" +
-        "  \"vorgang\": {\n" +
-        "    \"aktenzeichen\": \"string\",\n" +
-        "    \"archivieren\": \"string\",\n" +
-        "    \"archivierenDatum\": \"string\",\n" +
-        "    \"bemerkung\": \"string\",\n" +
-        "    \"id\": \"string\",\n" +
-        "    \"loeschen\": \"string\",\n" +
-        "    \"loeschenDatum\": \"string\",\n" +
-        "    \"rechtsgebiet\": \"string\",\n" +
-        "    \"register\": \"string\",\n" +
-        "    \"zustaendigerSachbearbeiter\": \"string\"\n" +
-        "  },\n" +
-        "  \"antragssteller\": {\n" +
-        "    \"vorname\": \"asstring\",\n" +
-        "    \"nachname\": \"asstring\",\n" +
-        "    \"id\": \"asstring\",\n" +
-        "    \"geburtsdatum\": \"asstring\"\n" +
-        "  },\n" +
-        "  \"leistungsempfaenger\": {\n" +
-        "    \"vorname\": \"lestring\",\n" +
-        "    \"nachname\": \"lestring\",\n" +
-        "    \"id\": \"lestring\",\n" +
-        "    \"geburtsdatum\": \"lestring\"\n" +
-        "  },\n" +
-        "  \"unterhaltspflichtiger\": {\n" +
-        "    \"vorname\": \"upstring\",\n" +
-        "    \"nachname\": \"upstring\",\n" +
-        "    \"id\": \"upstring\",\n" +
-        "    \"geburtsdatum\": \"upstring\"\n" +
-        "  }\n" +
-        "}");
 
       JsonObject fallAkte1 = new JsonObject();
       fallAkte1.put("eAktenID","eAktenID1234");
@@ -121,11 +192,11 @@ public class ApiVerticleTest {
       vorgang.put("archivieren","true");
       vorgang.put("archivierenDatum","2021-02-18");
       vorgang.put("bemerkung","bemerkungValue");
-      vorgang.put("id","id1");
+      vorgang.put("id","Akte2");
       vorgang.put("loeschen","false");
       vorgang.put("loeschenDatum","2024-02-18");
       vorgang.put("rechtsgebiet","rechtsgebietValue");
-      vorgang.put("register","registerValue");
+      vorgang.put("register","");
       vorgang.put("zustaendigerSachbearbeiter","zustaendigerSachbearbeiterValue");
       fallAkte1.put("vorgang", vorgang);
       JsonObject personBaseExtended1 = new JsonObject();
@@ -166,74 +237,51 @@ public class ApiVerticleTest {
   }
 
   @Test
-  void testDokumentPOST(VertxTestContext testContext) throws Throwable {
+  void testFallaktePOSTVorgangIDRegister(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       WebClientOptions options = new WebClientOptions()
         .setUserAgent("otto");
       options.setKeepAlive(false);
-      System.out.println("start the webclient: testDokumentPOST");
+      System.out.println("start the webclient: testFallaktePOST");
 
-      JsonObject dokumentBsp = new JsonObject("{\n" +
-        "  \"eDokumentenID\": \"string\",\n" +
-        "  \"erstellungZeitpunkt\": \"string\",\n" +
-        "  \"vorlage\": \"string\",\n" +
-        "  \"sachbearbeiter\": {\n" +
-        "    \"vorname\": \"asstring\",\n" +
-        "    \"nachname\": \"asstring\"\n" +
-        "  },\n" +
-        "  \"empfaenger\": {\n" +
-        "    \"vorname\": \"lestring\",\n" +
-        "    \"nachname\": \"lestring\"\n" +
-        "  },\n" +
-        "  \"prosozDateiname\": \"string\",\n" +
-        "  \"contentUrl\": \"string\"\n" +
-        "}");
-
-      JsonObject dokument = new JsonObject();
-      dokument.put("eDokumentenID","eAktenID1234");
-      dokument.put("erstellungZeitpunkt","2021-02-18");
-      dokument.put("vorlage","vorlage");
+      JsonObject fallAkte1 = new JsonObject();
+      fallAkte1.put("eAktenID","eAktenID1234");
+      JsonObject vorgang = new JsonObject();
+      vorgang.put("aktenzeichen","aktenzeichenValue");
+      vorgang.put("archivieren","true");
+      vorgang.put("archivierenDatum","2021-02-18");
+      vorgang.put("bemerkung","bemerkungValue");
+      vorgang.put("id","Akte1");
+      vorgang.put("loeschen","false");
+      vorgang.put("loeschenDatum","2024-02-18");
+      vorgang.put("rechtsgebiet","rechtsgebietValue");
+      vorgang.put("register","Register1");
+      vorgang.put("zustaendigerSachbearbeiter","zustaendigerSachbearbeiterValue");
+      fallAkte1.put("vorgang", vorgang);
       JsonObject personBaseExtended1 = new JsonObject();
-      personBaseExtended1.put("vorname","vornamesachbearbeiter");
-      personBaseExtended1.put("nachname","nachnamesachbearbeiter");
-      dokument.put("sachbearbeiter", personBaseExtended1);
+      personBaseExtended1.put("vorname","vornameantragssteller");
+      personBaseExtended1.put("nachname","nachnameantragssteller");
+      personBaseExtended1.put("id","idantragssteller");
+      personBaseExtended1.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("antragssteller", personBaseExtended1);
       JsonObject personBaseExtended2 = new JsonObject();
-      personBaseExtended2.put("vorname","vornameempfaenger");
-      personBaseExtended2.put("nachname","nachnameempfaenger");
-      dokument.put("empfaenger", personBaseExtended2);
-      dokument.put("prosozDateiname","prosozDateiname");
-      dokument.put("contentUrl","contentUrl");
-
-      try (FileWriter file = new FileWriter("src/test/resources/document.json")) {
-        file.write(dokument.toString());
-        file.flush();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      MultipartForm form = MultipartForm.create()
-        .textFileUpload("data","document","src/test/resources/document.json","application/json")
-//        .attribute("data", dokument.encode())
-//        .binaryFileUpload(
-//          "file",
-//          "Foto",
-//          "src/test/resources/DSC_8113.jpg",
-//          "image/jpg")
-        .binaryFileUpload(
-        "file",
-        "Lizenz",
-        "src/test/resources/LicenseCertificate-R5292742.pdf",
-        "application/pdf");
-
+      personBaseExtended2.put("vorname","vornameleistungsempfaenger");
+      personBaseExtended2.put("nachname","nachnameleistungsempfaenger");
+      personBaseExtended2.put("id","idleistungsempfaenger");
+      personBaseExtended2.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("leistungsempfaenger", personBaseExtended2);
+      JsonObject personBaseExtended3 = new JsonObject();
+      personBaseExtended3.put("vorname","Fritz");
+      personBaseExtended3.put("nachname","Walter");
+      personBaseExtended3.put("id","idunterhaltspflichtiger");
+      personBaseExtended3.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("unterhaltspflichtiger", personBaseExtended3);
 
       WebClient clientFallakte = WebClient.create(this.vertx, options);
       clientFallakte
-        .post(apiport, apiurl, "/api/Dokument")
-//        .post(30314, "10.211.55.4", "/api/Dokument")
-//        .putHeader("content-type", "multipart/form-data")
+        .post(apiport, apiurl, "/api/Fallakte")
         .basicAuthentication("yuuvis", "optimalsystem")
-        .sendMultipartForm(form)
-//        .sendJsonObject(dokument)
+        .sendJsonObject(fallAkte1)
         .onSuccess(ar -> {
           HttpResponse<Buffer> response = ar;
           System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
@@ -242,6 +290,454 @@ public class ApiVerticleTest {
         })
         .onFailure(err -> {
           System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testFallaktePUTVorgangID(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testFallaktePUT");
+
+      JsonObject fallAkte1 = new JsonObject();
+      fallAkte1.put("eAktenID","eAktenID1234");
+      JsonObject vorgang = new JsonObject();
+      vorgang.put("aktenzeichen","aktenzeichenXYungelöst");
+      vorgang.put("archivieren","true");
+      vorgang.put("archivierenDatum","2021-02-18");
+      vorgang.put("bemerkung","bemerkungValue");
+      vorgang.put("id","Akte2");
+      vorgang.put("loeschen","false");
+      vorgang.put("loeschenDatum","2024-02-18");
+      vorgang.put("rechtsgebiet","rechtsgebietValue");
+      vorgang.put("register","");
+      vorgang.put("zustaendigerSachbearbeiter","zustaendigerSachbearbeiterValue");
+      fallAkte1.put("vorgang", vorgang);
+      JsonObject personBaseExtended1 = new JsonObject();
+      personBaseExtended1.put("vorname","vornameantragssteller");
+      personBaseExtended1.put("nachname","nachnameantragssteller");
+      personBaseExtended1.put("id","idantragssteller");
+      personBaseExtended1.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("antragssteller", personBaseExtended1);
+      JsonObject personBaseExtended2 = new JsonObject();
+      personBaseExtended2.put("vorname","vornameleistungsempfaenger");
+      personBaseExtended2.put("nachname","nachnameleistungsempfaenger");
+      personBaseExtended2.put("id","idleistungsempfaenger");
+      personBaseExtended2.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("leistungsempfaenger", personBaseExtended2);
+      JsonObject personBaseExtended3 = new JsonObject();
+      personBaseExtended3.put("vorname","vornameunterhaltspflichtiger");
+      personBaseExtended3.put("nachname","nachnameunterhaltspflichtiger");
+      personBaseExtended3.put("id","idunterhaltspflichtiger");
+      personBaseExtended3.put("geburtsdatum","2002-03-21");
+      fallAkte1.put("unterhaltspflichtiger", personBaseExtended3);
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .put(apiport, apiurl, "/api/Fallakte")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendJsonObject(fallAkte1)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentGETGetDokumeteeDokumentenIDFallakte(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testGET");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Dokument")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .addQueryParam("eDokumentenID", "EMail-08.05.2021")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.body());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+  @Test
+
+  void testDokumentGETGetDokumeteeDokumentenIDKlientakte(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testGET");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Dokument")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .addQueryParam("eDokumentenID", "PDF-Lizenz")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.body());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentFallaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentPOST");
+
+      JsonObject dokument = new JsonObject();
+      dokument.put("Fallakte.EAktenID","Fallakte.EAktenID");
+      dokument.put("Fallakte.Vorgang.Aktenzeichen","Fallakte.Vorgang.Aktenzeichen");
+      dokument.put("Fallakte.Vorgang.Archivieren","Fallakte.Vorgang.Archivieren");
+      dokument.put("Fallakte.Vorgang.ArchivierenDatum","Fallakte.Vorgang.ArchivierenDatum");
+      dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
+      dokument.put("Fallakte.Vorgang.ID","Akte2");
+      dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
+      dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
+      dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
+      dokument.put("Fallakte.Vorgang.Register","");
+      dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
+      dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
+      dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
+      dokument.put("Fallakte.Antragssteller.Vorname","Fallakte.Antragssteller.Vorname");
+      dokument.put("Fallakte.Antragssteller.Nachname","Fallakte.Antragssteller.Nachname");
+      dokument.put("Fallakte.Leistungsempfaenger.ID","Fallakte.Leistungsempfaenger.ID");
+      dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","Fallakte.Leistungsempfaenger.Geburtsdatum");
+      dokument.put("Fallakte.Leistungsempfaenger.Vorname","Fallakte.Leistungsempfaenger.Vorname");
+      dokument.put("Fallakte.Leistungsempfaenger.Nachname","Fallakte.Leistungsempfaenger.Nachname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.ID","Fallakte.Unterhaltspflichtiger.ID");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","Fallakte.Unterhaltspflichtiger.Geburtsdatum");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Vorname","Fallakte.Unterhaltspflichtiger.Vorname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Nachname","Fallakte.Unterhaltspflichtiger.Nachname");
+      dokument.put("Fallakte.OrdnerObjektTypName","Fallakte.OrdnerObjektTypName");
+      dokument.put("Fallakte.RegisterObjektTypName","Fallakte.RegisterObjektTypName");
+      dokument.put("Klientakte.EAktenID","");
+      dokument.put("Klientakte.Klient.Adresse","");
+      dokument.put("Klientakte.Klient.ID","");
+      dokument.put("Klientakte.Klient.Geburtsdatum","");
+      dokument.put("Klientakte.Klient.Vorname","");
+      dokument.put("Klientakte.Klient.Nachname","Klientakte.Klient.Nachname");
+      dokument.put("Klientakte.Archivieren","Klientakte.Archivieren");
+      dokument.put("Klientakte.ArchivierenDatum","Klientakte.ArchivierenDatum");
+      dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
+      dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
+      dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
+      dokument.put("Dokument.EDokumentenID","EMail-08.05.2021");
+      dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
+      dokument.put("Dokument.Typ","Dokument.Typ");
+      dokument.put("Dokument.Vorlage","Dokument.Vorlage");
+      dokument.put("Dokument.Sachbearbeiter.Kennung","Dokument.Sachbearbeiter.Kennung");
+      dokument.put("Dokument.Sachbearbeiter.Vorname","Dokument.Sachbearbeiter.Vorname");
+      dokument.put("Dokument.Sachbearbeiter.Nachname","Dokument.Sachbearbeiter.Nachname");
+      dokument.put("Dokument.Empfaenger.Adresse","Dokument.Empfaenger.Adresse");
+      dokument.put("Dokument.Empfaenger.Vorname","Dokument.Empfaenger.Vorname");
+      dokument.put("Dokument.Empfaenger.Nachname","Dokument.Empfaenger.Nachname");
+      dokument.put("Dokument.ProsozDateiname","Dokument.ProsozDateiname");
+      dokument.put("Dokument.DokumentObjektTypName","Dokument.DokumentObjektTypName");
+      dokument.put("Dokument.ContentUrl","Dokument.ContentUrl");
+
+      MultipartForm form = MultipartForm.create()
+        .attribute("data", dokument.encode())
+        .binaryFileUpload(
+        "File",
+        "Lizenz",
+        "src/test/resources/LicenseCertificate-R5292742.pdf",
+        "application/pdf");
+
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .post(apiport, apiurl, "/api/Dokument")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendMultipartForm(form)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentFallaktePOSTVorgangIDRegister(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentPOST");
+
+      JsonObject dokument = new JsonObject();
+      dokument.put("Fallakte.EAktenID","Fallakte.EAktenID");
+      dokument.put("Fallakte.Vorgang.Aktenzeichen","Fallakte.Vorgang.Aktenzeichen");
+      dokument.put("Fallakte.Vorgang.Archivieren","Fallakte.Vorgang.Archivieren");
+      dokument.put("Fallakte.Vorgang.ArchivierenDatum","Fallakte.Vorgang.ArchivierenDatum");
+      dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
+      dokument.put("Fallakte.Vorgang.ID","Akte2");
+      dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
+      dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
+      dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
+      dokument.put("Fallakte.Vorgang.Register","Register2");
+      dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
+      dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
+      dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
+      dokument.put("Fallakte.Antragssteller.Vorname","Fallakte.Antragssteller.Vorname");
+      dokument.put("Fallakte.Antragssteller.Nachname","Fallakte.Antragssteller.Nachname");
+      dokument.put("Fallakte.Leistungsempfaenger.ID","Fallakte.Leistungsempfaenger.ID");
+      dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","Fallakte.Leistungsempfaenger.Geburtsdatum");
+      dokument.put("Fallakte.Leistungsempfaenger.Vorname","Fallakte.Leistungsempfaenger.Vorname");
+      dokument.put("Fallakte.Leistungsempfaenger.Nachname","Fallakte.Leistungsempfaenger.Nachname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.ID","Fallakte.Unterhaltspflichtiger.ID");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","Fallakte.Unterhaltspflichtiger.Geburtsdatum");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Vorname","Fallakte.Unterhaltspflichtiger.Vorname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Nachname","Fallakte.Unterhaltspflichtiger.Nachname");
+      dokument.put("Fallakte.OrdnerObjektTypName","Fallakte.OrdnerObjektTypName");
+      dokument.put("Fallakte.RegisterObjektTypName","Fallakte.RegisterObjektTypName");
+      dokument.put("Klientakte.EAktenID","");
+      dokument.put("Klientakte.Klient.Adresse","");
+      dokument.put("Klientakte.Klient.ID","");
+      dokument.put("Klientakte.Klient.Geburtsdatum","");
+      dokument.put("Klientakte.Klient.Vorname","");
+      dokument.put("Klientakte.Klient.Nachname","Klientakte.Klient.Nachname");
+      dokument.put("Klientakte.Archivieren","Klientakte.Archivieren");
+      dokument.put("Klientakte.ArchivierenDatum","Klientakte.ArchivierenDatum");
+      dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
+      dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
+      dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
+      dokument.put("Dokument.EDokumentenID","Dokument.EDokumentenID");
+      dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
+      dokument.put("Dokument.Typ","Dokument.Typ");
+      dokument.put("Dokument.Vorlage","Dokument.Vorlage");
+      dokument.put("Dokument.Sachbearbeiter.Kennung","Dokument.Sachbearbeiter.Kennung");
+      dokument.put("Dokument.Sachbearbeiter.Vorname","Dokument.Sachbearbeiter.Vorname");
+      dokument.put("Dokument.Sachbearbeiter.Nachname","Dokument.Sachbearbeiter.Nachname");
+      dokument.put("Dokument.Empfaenger.Adresse","Dokument.Empfaenger.Adresse");
+      dokument.put("Dokument.Empfaenger.Vorname","Dokument.Empfaenger.Vorname");
+      dokument.put("Dokument.Empfaenger.Nachname","Dokument.Empfaenger.Nachname");
+      dokument.put("Dokument.ProsozDateiname","Dokument.ProsozDateiname");
+      dokument.put("Dokument.DokumentObjektTypName","Dokument.DokumentObjektTypName");
+      dokument.put("Dokument.ContentUrl","Dokument.ContentUrl");
+
+      MultipartForm form = MultipartForm.create()
+        .attribute("data", dokument.encode())
+        .binaryFileUpload(
+          "File",
+          "Lizenz",
+          "src/test/resources/LicenseCertificate-R5292742.pdf",
+          "application/pdf");
+
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .post(apiport, apiurl, "/api/Dokument")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendMultipartForm(form)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentKlientaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentPOST");
+
+      JsonObject dokument = new JsonObject();
+      dokument.put("Fallakte.EAktenID","Fallakte.EAktenID");
+      dokument.put("Fallakte.Vorgang.Aktenzeichen","Fallakte.Vorgang.Aktenzeichen");
+      dokument.put("Fallakte.Vorgang.Archivieren","Fallakte.Vorgang.Archivieren");
+      dokument.put("Fallakte.Vorgang.ArchivierenDatum","Fallakte.Vorgang.ArchivierenDatum");
+      dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
+      dokument.put("Fallakte.Vorgang.ID","Akte2");
+      dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
+      dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
+      dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
+      dokument.put("Fallakte.Vorgang.Register","");
+      dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
+      dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
+      dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
+      dokument.put("Fallakte.Antragssteller.Vorname","Fallakte.Antragssteller.Vorname");
+      dokument.put("Fallakte.Antragssteller.Nachname","Fallakte.Antragssteller.Nachname");
+      dokument.put("Fallakte.Leistungsempfaenger.ID","Fallakte.Leistungsempfaenger.ID");
+      dokument.put("Fallakte.Leistungsempfaenger.Geburtsdatum","Fallakte.Leistungsempfaenger.Geburtsdatum");
+      dokument.put("Fallakte.Leistungsempfaenger.Vorname","Fallakte.Leistungsempfaenger.Vorname");
+      dokument.put("Fallakte.Leistungsempfaenger.Nachname","Fallakte.Leistungsempfaenger.Nachname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.ID","Fallakte.Unterhaltspflichtiger.ID");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Geburtsdatum","Fallakte.Unterhaltspflichtiger.Geburtsdatum");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Vorname","Fallakte.Unterhaltspflichtiger.Vorname");
+      dokument.put("Fallakte.Unterhaltspflichtiger.Nachname","Fallakte.Unterhaltspflichtiger.Nachname");
+      dokument.put("Fallakte.OrdnerObjektTypName","Fallakte.OrdnerObjektTypName");
+      dokument.put("Fallakte.RegisterObjektTypName","Fallakte.RegisterObjektTypName");
+      dokument.put("Klientakte.EAktenID","");
+      dokument.put("Klientakte.Klient.Adresse","");
+      dokument.put("Klientakte.Klient.ID","Klientid");
+      dokument.put("Klientakte.Klient.Geburtsdatum","");
+      dokument.put("Klientakte.Klient.Vorname","");
+      dokument.put("Klientakte.Klient.Nachname","Klientakte.Klient.Nachname");
+      dokument.put("Klientakte.Archivieren","Klientakte.Archivieren");
+      dokument.put("Klientakte.ArchivierenDatum","Klientakte.ArchivierenDatum");
+      dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
+      dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
+      dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
+      dokument.put("Dokument.EDokumentenID","PDF-Lizenz");
+      dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
+      dokument.put("Dokument.Typ","Dokument.Typ");
+      dokument.put("Dokument.Vorlage","Dokument.Vorlage");
+      dokument.put("Dokument.Sachbearbeiter.Kennung","Dokument.Sachbearbeiter.Kennung");
+      dokument.put("Dokument.Sachbearbeiter.Vorname","Dokument.Sachbearbeiter.Vorname");
+      dokument.put("Dokument.Sachbearbeiter.Nachname","Dokument.Sachbearbeiter.Nachname");
+      dokument.put("Dokument.Empfaenger.Adresse","Dokument.Empfaenger.Adresse");
+      dokument.put("Dokument.Empfaenger.Vorname","Dokument.Empfaenger.Vorname");
+      dokument.put("Dokument.Empfaenger.Nachname","Dokument.Empfaenger.Nachname");
+      dokument.put("Dokument.ProsozDateiname","Dokument.ProsozDateiname");
+      dokument.put("Dokument.DokumentObjektTypName","Dokument.DokumentObjektTypName");
+      dokument.put("Dokument.ContentUrl","Dokument.ContentUrl");
+
+      MultipartForm form = MultipartForm.create()
+        .attribute("data", dokument.encode())
+        .binaryFileUpload(
+          "File",
+          "Lizenz",
+          "src/test/resources/LicenseCertificate-R5292742.pdf",
+          "application/pdf");
+
+
+      WebClient clientFallakte = WebClient.create(this.vertx, options);
+      clientFallakte
+        .post(apiport, apiurl, "/api/Dokument")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .sendMultipartForm(form)
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received POST response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received POST response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("POST Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentGETGetDokumeteKlientID(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentGETGetDokumeteKlientID");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Dokument/GetDokumente")
+        .addQueryParam("klientID", "Klientid")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentGETGetDokumeteVorgangID(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentGETGetDokumeteKlientID");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Dokument/GetDokumente")
+        .addQueryParam("vorgangID", "Akte2")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
+  @Test
+  void testDokumentGETGetDokumeteVorgangIDRegister(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testDokumentGETGetDokumeteKlientID");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/api/Dokument/GetDokumente")
+        .addQueryParam("vorgangID", "Akte1")
+        .addQueryParam("vorgangRegister", "Register1")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
           testContext.completeNow();
         });
     }

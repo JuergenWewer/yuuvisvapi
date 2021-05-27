@@ -3,11 +3,11 @@ info:
   title: osvhProsozNeoWebAPI
   version: v1
 servers:
-  - url: 'https://localhost'
+  - url: 'http://localhost:8080'
 paths:
   /api/Dokument:
     get:
-      summary: stellt die zur eDokumentId gehoerende Datei zur Verfuegung
+      summary: Stellt die zur eDokumentenID gehörige Datei zur Verfügung
       operationId: Dokument_Get
       tags:
         - Dokument
@@ -17,8 +17,7 @@ paths:
           description: eDokumentenID des Dokuments
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: Dekument wurde gefunden und wird als Bytestream zurueckgegeben
@@ -27,33 +26,260 @@ paths:
               schema:
                 type: string
                 format: binary
+        '204':
+          description: 'Dokument mit der eDokumentenID existiert nicht, oder es wurde noch keine Dokumentdatei angeheftet.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Nicht autorisiert.
+          content:
+            application/json:
+              schema:
+                type: string
+        '500':
+          description: Fehler bei der Kommunikation mit enaio® aufgetreten
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+        - httpBasicAuth: []
     post:
       tags:
         - Dokument
-      summary: Erstellt aus den übergebenen Metadaten und dem File ein neues Dokument in enaio®\n Je nach Ausprägung der Metadaten wird das Dokument in einer Klientakte oder Fallakte/Vorgang (ggf. mit Registerbezug) abgelegt.\nFür die korrekte Aktenzuordnung werden a) Fallakte.Vorgang.ID + ggf. Fallakte.Vorgang.Register oder b) Klientakte.Klient.ID\nbenötigt.
+      summary: |-
+        Erstellt aus den übergebenen Metadaten und dem File ein neues Dokument in enaio®
+        Je nach Ausprägung der Metadaten wird das Dokument in einer Klientakte oder Fallakte/Vorgang (ggf. mit Registerbezug) abgelegt.
+        Für die korrekte Aktenzuordnung werden a) Fallakte.Vorgang.ID + ggf. Fallakte.Vorgang.Register oder b) Klientakte.Klient.ID
+        benötigt.
       operationId: Dokument_Post
       requestBody:
-        x-name: fallakte
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Dokument'
           multipart/form-data:
             schema:
               type: object
-              properties: {}
-        required: true
-        x-position: 1
+              properties:
+                Fallakte.EAktenID:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Aktenzeichen:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Archivieren:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.ArchivierenDatum:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Bemerkung:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.ID:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Loeschen:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.LoeschenDatum:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Rechtsgebiet:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.Register:
+                  type: string
+                  nullable: true
+                Fallakte.Vorgang.ZustaendigerSachbearbeiter:
+                  type: string
+                  nullable: true
+                Fallakte.Antragssteller.ID:
+                  type: string
+                  nullable: true
+                Fallakte.Antragssteller.Geburtsdatum:
+                  type: string
+                  nullable: true
+                Fallakte.Antragssteller.Vorname:
+                  type: string
+                  nullable: true
+                Fallakte.Antragssteller.Nachname:
+                  type: string
+                  nullable: true
+                Fallakte.Leistungsempfaenger.ID:
+                  type: string
+                  nullable: true
+                Fallakte.Leistungsempfaenger.Geburtsdatum:
+                  type: string
+                  nullable: true
+                Fallakte.Leistungsempfaenger.Vorname:
+                  type: string
+                  nullable: true
+                Fallakte.Leistungsempfaenger.Nachname:
+                  type: string
+                  nullable: true
+                Fallakte.Unterhaltspflichtiger.ID:
+                  type: string
+                  nullable: true
+                Fallakte.Unterhaltspflichtiger.Geburtsdatum:
+                  type: string
+                  nullable: true
+                Fallakte.Unterhaltspflichtiger.Vorname:
+                  type: string
+                  nullable: true
+                Fallakte.Unterhaltspflichtiger.Nachname:
+                  type: string
+                  nullable: true
+                Fallakte.OrdnerObjektTypName:
+                  type: string
+                  nullable: true
+                Fallakte.RegisterObjektTypName:
+                  type: string
+                  nullable: true
+                Klientakte.EAktenID:
+                  type: string
+                  nullable: true
+                Klientakte.Klient.Adresse:
+                  type: string
+                  nullable: true
+                Klientakte.Klient.ID:
+                  type: string
+                  nullable: true
+                Klientakte.Klient.Geburtsdatum:
+                  type: string
+                  nullable: true
+                Klientakte.Klient.Vorname:
+                  type: string
+                  nullable: true
+                Klientakte.Klient.Nachname:
+                  type: string
+                  nullable: true
+                Klientakte.Archivieren:
+                  type: string
+                  nullable: true
+                Klientakte.ArchivierenDatum:
+                  type: string
+                  nullable: true
+                Klientakte.Loeschen:
+                  type: string
+                  nullable: true
+                Klientakte.LoeschenDatum:
+                  type: string
+                  nullable: true
+                Klientakte.OrdnerObjektTypName:
+                  type: string
+                  nullable: true
+                Dokument.EDokumentenID:
+                  type: string
+                  nullable: true
+                Dokument.ErstellungZeitpunkt:
+                  type: string
+                  nullable: true
+                Dokument.Typ:
+                  type: string
+                  nullable: true
+                Dokument.Vorlage:
+                  type: string
+                  nullable: true
+                Dokument.Sachbearbeiter.Kennung:
+                  type: string
+                  nullable: true
+                Dokument.Sachbearbeiter.Vorname:
+                  type: string
+                  nullable: true
+                Dokument.Sachbearbeiter.Nachname:
+                  type: string
+                  nullable: true
+                Dokument.Empfaenger.Adresse:
+                  type: string
+                  nullable: true
+                Dokument.Empfaenger.Vorname:
+                  type: string
+                  nullable: true
+                Dokument.Empfaenger.Nachname:
+                  type: string
+                  nullable: true
+                Dokument.ProsozDateiname:
+                  type: string
+                  nullable: true
+                Dokument.DokumentObjektTypName:
+                  type: string
+                  nullable: true
+                Dokument.ContentUrl:
+                  type: string
+                  nullable: true
+                File:
+                  type: string
+                  format: binary
+                  nullable: true
+            encoding:
+              File:
+                contentType: application/pdf, image/jpeg
       responses:
         '200':
-          description: Dokument wurde angelegt.
+          description: Dokument erfolgreich im enaio® angelegt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallakteDokument'
+        '204':
+          description: Akte existiert nicht.
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Nicht autorisiert.
+          content:
+            application/json:
+              schema:
+                type: string
+        '500':
+          description: Fehler bei der Kommunikation mit enaio® aufgetreten
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+        - httpBasicAuth: []
+  /api/Dokument/GetDokumente:
+    get:
+      tags:
+        - Dokument
+      summary: 'Ermittelt in Abhängigkeit zur klientID die Dokumente der Klientakte, oder in Abhängigkeit zur vorgangID (ggf. mit vorgangRegister) die Dokumente der Fallakte'
+      operationId: Dokument_GetDokumente
+      parameters:
+        - name: klientID
+          in: query
+          description: ID der Klientakte
+          schema:
+            type: string
+            nullable: true
+          x-position: 1
+        - name: vorgangID
+          in: query
+          description: ID der Vorgangsakte/Fallakte
+          schema:
+            type: string
+            nullable: true
+          x-position: 2
+        - name: vorgangRegister
+          in: query
+          description: Vorgangsregister
+          schema:
+            type: string
+            nullable: true
+          x-position: 3
+      responses:
+        '200':
+          description: Akte gefunden - Dokumente werden zurückgeliefert.
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
         '204':
-          description: 'Dokument mit der eDokumentenID existiert nicht, oder es wurde noch keine Dokumentdatei angeheftet.'
+          description: Die VorgangsID oder das Register/der Unterordner existiert im enaio® nicht.
           content:
             application/json:
               schema:
@@ -357,7 +583,7 @@ components:
         nachname:
           type: string
           nullable: true
-    Dokument:
+    DokumentPut:
       type: object
       properties:
         eDokumentenID:
@@ -387,6 +613,17 @@ components:
         contentUrl:
           type: string
           description: URL unter welcher die Dokumentdatei abgerufen (GET) werden kann.
+          nullable: true
+    Dokument:
+      type: object
+      properties:
+        Fallakte.EAktenID:
+          type: string
+          description: Eindeutige ID im enaio®
+          nullable: true
+        File:
+          type: string
+          format: binary
           nullable: true
     Sachbearbeiter:
       allOf:

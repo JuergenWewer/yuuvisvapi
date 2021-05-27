@@ -107,9 +107,21 @@ sollte einen Eintrag haben, sonst per nano editieren:
     }
   }
 }
+neu:
+{
+"auths": {
+"jw-cloud.org:18443": {}
+},
+"credsStore": "osxkeychain"
+}
 
 kubectl create secret generic regcred \
 --from-file=.dockerconfigjson=/root/.docker/config.json \
+--type=kubernetes.io/dockerconfigjson --dry-run=client  --output=yaml > optimal-secrets.yaml
+
+neu:
+kubectl create secret generic jwcloudcred \
+--from-file=.dockerconfigjson=/Users/wewer/.docker/config.json \
 --type=kubernetes.io/dockerconfigjson --dry-run=client  --output=yaml > optimal-secrets.yaml
 
 dann:
@@ -141,9 +153,8 @@ deploy the application:
 edit the version in api helm - deployment.yaml in the image:
 helm install yuuvis-v-api api
 
-
-to test in the container:
-curl -v -u root:optimalsystem -H "X-ID-TENANT-NAME: yuuvistest" 10.100.124.242:80/api/admin/schema
 ##############################################################################
 helm uninstall yuuvis-v-api
 helm uninstall nexus
+
+
