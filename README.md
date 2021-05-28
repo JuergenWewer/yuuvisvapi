@@ -143,9 +143,11 @@ deploy yuuvis-api to the cluster
 ###########################################################################
 
 
+create docker secret:
+helm install nexus nexus
+
 Check the ip adress in:
 api/templates/deployment.yaml
-
 
 
 deploy the application:
