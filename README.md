@@ -124,6 +124,10 @@ kubectl create secret generic jwcloudcred \
 --from-file=.dockerconfigjson=/Users/wewer/.docker/config.json \
 --type=kubernetes.io/dockerconfigjson --dry-run=client  --output=yaml > optimal-secrets.yaml
 
+sudo kubectl create secret generic jwcloudcred \
+--from-file=.dockerconfigjson=/root/.docker/config.json \
+--type=kubernetes.io/dockerconfigjson --dry-run=client  --output=yaml > optimal-secrets.yaml
+
 dann:
 
 cat optimal-secrets.yaml
@@ -142,7 +146,7 @@ helm install nexus nexus
 deploy yuuvis-api to the cluster
 ###########################################################################
 
-
+only once:
 create docker secret:
 helm install nexus nexus
 
@@ -159,4 +163,23 @@ helm install yuuvis-v-api api
 helm uninstall yuuvis-v-api
 helm uninstall nexus
 
+
+######################################################################
+deploy on azure
+######################################################################
+
+to test:
+kubectl get pods --namespace=yuuvis --kubeconfig=/Users/wewer/Optimal/kube_Azure.config
+
+1. create nexus secret - once
+helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install nexus nexus
+
+2. deploy service and application
+   helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall yuuvis-v-api
+helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install yuuvis-v-api api
+
+3. create ingress
+   helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install ingress ingress
+   helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall ingress
+#######################################################################
 

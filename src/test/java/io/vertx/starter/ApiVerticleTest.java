@@ -40,6 +40,11 @@ public class ApiVerticleTest {
     Map<String,String> newEnv = new HashMap<>();
     newEnv.put("AUTHENTICATION_SERVICE_HOST", "10.211.55.4");
     newEnv.put("AUTHENTICATION_SERVICE_PORT", "30080");
+    newEnv.put("TENANT", "yuuvistest");
+    newEnv.put("USER", "yuuvis");
+    newEnv.put("PASSWORD", "optimalsystem");
+    newEnv.put("YUUVISUSER", "root");
+    newEnv.put("YUUVISPASSWORD", "optimalsystem");
     setEnv(newEnv);
     vertx.deployVerticle(new ApiVerticle(), testContext.succeeding(id -> {
       System.out.println("server startet");
@@ -48,6 +53,7 @@ public class ApiVerticleTest {
     }));
   }
 
+///////////////////  Klientakte /////////////////////////
 
   @Test
   void testKlientakteGET(VertxTestContext testContext) throws Throwable {
@@ -151,6 +157,8 @@ public class ApiVerticleTest {
         });
     }
   }
+
+///////////////////  Fallakte  /////////////////////////
 
   @Test
   void testFallakteGET(VertxTestContext testContext) throws Throwable {
@@ -354,6 +362,8 @@ public class ApiVerticleTest {
     }
   }
 
+///////////////    Get Dokumente Fallakte /////////////////
+
   @Test
   void testDokumentGETGetDokumeteeDokumentenIDFallakte(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
@@ -379,8 +389,10 @@ public class ApiVerticleTest {
         });
     }
   }
-  @Test
 
+///////////////    Get Dokumente Klientakte  /////////////
+
+  @Test
   void testDokumentGETGetDokumeteeDokumentenIDKlientakte(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
       WebClientOptions options = new WebClientOptions()
@@ -405,6 +417,8 @@ public class ApiVerticleTest {
         });
     }
   }
+
+///////////////    POST Dokument Fallakte
 
   @Test
   void testDokumentFallaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
@@ -506,11 +520,11 @@ public class ApiVerticleTest {
       dokument.put("Fallakte.Vorgang.Archivieren","Fallakte.Vorgang.Archivieren");
       dokument.put("Fallakte.Vorgang.ArchivierenDatum","Fallakte.Vorgang.ArchivierenDatum");
       dokument.put("Fallakte.Vorgang.Bemerkung","Fallakte.Vorgang.Bemerkung");
-      dokument.put("Fallakte.Vorgang.ID","Akte2");
+      dokument.put("Fallakte.Vorgang.ID","Akte1");
       dokument.put("Fallakte.Vorgang.Loeschen","Fallakte.Vorgang.Loeschen");
       dokument.put("Fallakte.Vorgang.LoeschenDatum","Fallakte.Vorgang.LoeschenDatum");
       dokument.put("Fallakte.Vorgang.Rechtsgebiet","Fallakte.Vorgang.Rechtsgebiet");
-      dokument.put("Fallakte.Vorgang.Register","Register2");
+      dokument.put("Fallakte.Vorgang.Register","Register1");
       dokument.put("Fallakte.Vorgang.ZustaendigerSachbearbeiter","Fallakte.Vorgang.ZustaendigerSachbearbeiter");
       dokument.put("Fallakte.Antragssteller.ID","Fallakte.Antragssteller.ID");
       dokument.put("Fallakte.Antragssteller.Geburtsdatum","Fallakte.Antragssteller.Geburtsdatum");
@@ -577,6 +591,8 @@ public class ApiVerticleTest {
         });
     }
   }
+
+////////////////   POST Dokument Klientakte
 
   @Test
   void testDokumentKlientaktePOSTVorgangID(VertxTestContext testContext) throws Throwable {
@@ -664,6 +680,7 @@ public class ApiVerticleTest {
     }
   }
 
+///////////////    Get Dokument  KlientID
   @Test
   void testDokumentGETGetDokumeteKlientID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
@@ -690,6 +707,7 @@ public class ApiVerticleTest {
     }
   }
 
+///////////////     Get Dokument Fallakte
   @Test
   void testDokumentGETGetDokumeteVorgangID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
@@ -742,6 +760,8 @@ public class ApiVerticleTest {
         });
     }
   }
+
+
 
   protected static void setEnv(Map<String, String> newenv) throws Exception {
     try {

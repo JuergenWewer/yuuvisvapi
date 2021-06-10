@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 10G
+  name: auth-service-ingress
+  namespace: yuuvis
+spec:
+  rules:
+  - host: momentum.tobbib.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          serviceName: authentication
+          servicePort: 80
+  tls:
+  - hosts:
+    - momentum.tobbib.com
+    secretName: momentum-tobbib-cert

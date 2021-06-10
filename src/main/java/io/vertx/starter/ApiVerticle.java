@@ -34,12 +34,16 @@ public class ApiVerticle extends AbstractVerticle {
   public static final String BASIC_USERNAME = "username";
   public static final String BASIC_PASSWORD = "password";
 
-  public static final String USER = "yuuvis";
-  public static final String PASSWORD = "optimalsystem";
+  public static String USER = "yuuvis";
+  public static String PASSWORD = "optimalsystem";
+  public static String YUUVISUSER = "root";
+  public static String YUUVISPASSWORD = "optimalsystem";
   public static final String UPLOADDIR = "uploads";
 
   public static String yuuvisuri = null;
   public static int yuuvisport = 0;
+  public static String TENANT = null;
+  public static String TABLENAME = null;
 
 
   @Override
@@ -50,8 +54,41 @@ public class ApiVerticle extends AbstractVerticle {
       yuuvisport = Integer.valueOf(System.getenv("AUTHENTICATION_SERVICE_PORT"));
 //      yuuvisport = 30080;
     }
+    if (System.getenv("TENANT") != null) {
+      TENANT = System.getenv("TENANT");
+    } else {
+      TENANT = "yuuvistest";
+    }
+    String cap = TENANT.substring(0, 1).toUpperCase() + TENANT.substring(1);
+    TABLENAME = "ten" + cap;
+    if (System.getenv("USER") != null) {
+      USER = System.getenv("USER");
+    } else {
+      USER = "yuuvis";
+    }
+    if (System.getenv("PASSWORD") != null) {
+      PASSWORD = System.getenv("PASSWORD");
+    } else {
+      PASSWORD = "optimalsystem";
+    }
+    if (System.getenv("YUUVISUSER") != null) {
+      YUUVISUSER = System.getenv("YUUVISUSER");
+    } else {
+      YUUVISUSER = "root";
+    }
+    if (System.getenv("YUUVISPASSWORD") != null) {
+      YUUVISPASSWORD = System.getenv("YUUVISPASSWORD");
+    } else {
+      YUUVISPASSWORD = "optimalsystem";
+    }
     System.out.println("yuuvisuri: " + yuuvisuri);
     System.out.println("yuuvisport: " + yuuvisport);
+    System.out.println("TENANT: " + TENANT);
+    System.out.println("TABLENAME: " + TABLENAME);
+    System.out.println("USER: " + USER);
+    System.out.println("PASSWORD: " + PASSWORD.substring(0, 2) + "...");
+    System.out.println("YUUVISUSER: " + YUUVISUSER);
+    System.out.println("YUUVISPASSWORD: " + YUUVISPASSWORD.substring(0, 2) + "...");
     WebClientOptions options = new WebClientOptions()
       .setUserAgent("otto");
     options.setKeepAlive(false);
@@ -77,7 +114,7 @@ public class ApiVerticle extends AbstractVerticle {
           }
           System.out.println("entered handler by id Dokument_Get eDokumentenID: " + eDokumentenID.get(0));
           JsonObject yuuvisQuery = new JsonObject();
-          yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneodokument WHERE tenYuuvistest:edokumentenid = '" + eDokumentenID.get(0) + "'");
+          yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneodokument WHERE " + TABLENAME  +  ":" + "edokumentenid = '" + eDokumentenID.get(0) + "'");
           yuuvisQuery.put("skipCount",0);
           yuuvisQuery.put("maxItems",50);
           JsonObject yuuvisQueryObject = new JsonObject();
@@ -86,8 +123,8 @@ public class ApiVerticle extends AbstractVerticle {
           client
             .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
             .timeout(20000)
-            .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-            .basicAuthentication("root", "optimalsystem")
+            .putHeader("X-ID-TENANT-NAME", TENANT)
+            .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(sr -> {
               HttpResponse<Buffer> responseQuery = sr;
@@ -105,8 +142,8 @@ public class ApiVerticle extends AbstractVerticle {
                 client
                   .get(yuuvisport, yuuvisuri, "/api/dms/objects/" + objectId + "/contents/file")
                   .timeout(20000)
-                  .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                  .basicAuthentication("root", "optimalsystem")
+                  .putHeader("X-ID-TENANT-NAME", TENANT)
+                  .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                   .send()
                   .onSuccess(ar -> {
                     HttpResponse<Buffer> responseQueryDokument = ar;
@@ -127,7 +164,7 @@ public class ApiVerticle extends AbstractVerticle {
               } else {
 //                check if klientakte
                 JsonObject yuuvisQuery2 = new JsonObject();
-                yuuvisQuery2.put("statement", "SELECT * FROM tenYuuvistest:klientakteneodokument WHERE tenYuuvistest:edokumentenid = '" + eDokumentenID.get(0) + "'");
+                yuuvisQuery2.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneodokument WHERE " + TABLENAME  +  ":" + "edokumentenid = '" + eDokumentenID.get(0) + "'");
                 yuuvisQuery2.put("skipCount", 0);
                 yuuvisQuery2.put("maxItems", 50);
                 JsonObject yuuvisQueryObject2 = new JsonObject();
@@ -135,8 +172,8 @@ public class ApiVerticle extends AbstractVerticle {
                 client
                   .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
                   .timeout(20000)
-                  .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                  .basicAuthentication("root", "optimalsystem")
+                  .putHeader("X-ID-TENANT-NAME", TENANT)
+                  .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                   .sendJsonObject(yuuvisQueryObject2)
                   .onSuccess(sr2 -> {
                     HttpResponse<Buffer> responseQuery2 = sr2;
@@ -154,8 +191,8 @@ public class ApiVerticle extends AbstractVerticle {
                       client
                         .get(yuuvisport, yuuvisuri, "/api/dms/objects/" + objectId2 + "/contents/file")
                         .timeout(20000)
-                        .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                        .basicAuthentication("root", "optimalsystem")
+                        .putHeader("X-ID-TENANT-NAME", TENANT)
+                        .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                         .send()
                         .onSuccess(ar2 -> {
                           HttpResponse<Buffer> responseQueryDokument2 = ar2;
@@ -256,13 +293,13 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject yuuvisQuery = new JsonObject();
           if (fallakte) {
             if (requestBody.getString("Fallakte.Vorgang.Register").isEmpty()) {
-              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'");
+              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'");
             } else {
-              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'" +
-                " AND tenYuuvistest:register = '" + requestBody.getString("Fallakte.Vorgang.Register") + "'");
+              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'" +
+                " AND " + TABLENAME  +  ":" + "register = '" + requestBody.getString("Fallakte.Vorgang.Register") + "'");
             }
           } else {
-            yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:klientakteneo WHERE tenYuuvistest:id = '" + requestBody.getString("Klientakte.Klient.ID") + "'");
+            yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneo WHERE " + TABLENAME  +  ":" + "id = '" + requestBody.getString("Klientakte.Klient.ID") + "'");
           }
           yuuvisQuery.put("skipCount",0);
           yuuvisQuery.put("maxItems",50);
@@ -272,8 +309,8 @@ public class ApiVerticle extends AbstractVerticle {
           client
             .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
             .timeout(20000)
-            .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-            .basicAuthentication("root", "optimalsystem")
+            .putHeader("X-ID-TENANT-NAME", TENANT)
+            .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(ar -> {
               HttpResponse<Buffer> responseQuery = ar;
@@ -290,7 +327,7 @@ public class ApiVerticle extends AbstractVerticle {
                   for (int i = 0; i < results; i++) {
                     JsonObject yuuvisSearchObject = yuuvisSearchObjects.getJsonObject(i);
                     JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
-                    if (searchProperties.getString("tenYuuvistest:register") == null) {
+                    if (searchProperties.getString("" + TABLENAME  +  ":" + "register") == null) {
                       yuuvisSearchIndex = i;
                     }
                   }
@@ -327,9 +364,9 @@ public class ApiVerticle extends AbstractVerticle {
                   client
                     .post(yuuvisport, yuuvisuri, "/api/dms/objects")
                     .timeout(10000)
-                    .putHeader("X-ID-TENANT-NAME", "yuuvistest")
+                    .putHeader("X-ID-TENANT-NAME", TENANT)
                     .putHeader("content-type", "multipart/form-data")
-                    .basicAuthentication("root", "optimalsystem")
+                    .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                     .sendMultipartForm(form)
 //                  .sendJsonObject(yuuvisDocuments)
                     .onSuccess(arDocument -> {
@@ -414,13 +451,13 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject yuuvisQuery = new JsonObject();
             if (fallakte) {
               if (vorgangRegister.isEmpty()) {
-                yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + vorgangID.get(0) + "'");
+                yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + vorgangID.get(0) + "'");
               } else {
-                yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + vorgangID.get(0) + "'" +
-                  " AND tenYuuvistest:register = '" + vorgangRegister.get(0) + "'");
+                yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + vorgangID.get(0) + "'" +
+                  " AND " + TABLENAME  +  ":" + "register = '" + vorgangRegister.get(0) + "'");
               }
             } else {
-              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:klientakteneo WHERE tenYuuvistest:id = '" + klientID.get(0) + "'");
+              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneo WHERE " + TABLENAME  +  ":" + "id = '" + klientID.get(0) + "'");
             }
             yuuvisQuery.put("skipCount",0);
             yuuvisQuery.put("maxItems",50);
@@ -430,8 +467,8 @@ public class ApiVerticle extends AbstractVerticle {
             client
               .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
               .timeout(20000)
-              .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-              .basicAuthentication("root", "optimalsystem")
+              .putHeader("X-ID-TENANT-NAME", TENANT)
+              .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
               .sendJsonObject(yuuvisQueryObject)
               .onSuccess(sr -> {
                 HttpResponse<Buffer> responseQuery = sr;
@@ -474,7 +511,7 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject properties = new JsonObject();
 
           JsonObject systemObject = new JsonObject();
-          systemObject.put("value","tenYuuvistest:fallakteneo");
+          systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
           properties.put("system:objectTypeId",systemObject);
           //vorname, nachname
           JsonObject clienttitle = new JsonObject();
@@ -563,10 +600,10 @@ public class ApiVerticle extends AbstractVerticle {
 
           JsonObject yuuvisQuery = new JsonObject();
           if (requestBody.getJsonObject("vorgang").getString("register").isEmpty()) {
-            yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'");
+            yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'");
           } else {
-            yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'" +
-              " AND tenYuuvistest:register = '" + requestBody.getJsonObject("vorgang").getString("register") + "'");
+            yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'" +
+              " AND " + TABLENAME  +  ":" + "register = '" + requestBody.getJsonObject("vorgang").getString("register") + "'");
           }
           yuuvisQuery.put("skipCount",0);
           yuuvisQuery.put("maxItems",50);
@@ -576,8 +613,8 @@ public class ApiVerticle extends AbstractVerticle {
           client
             .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
             .timeout(20000)
-            .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-            .basicAuthentication("root", "optimalsystem")
+            .putHeader("X-ID-TENANT-NAME", TENANT)
+            .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(sr -> {
               HttpResponse<Buffer> responseQuery = sr;
@@ -589,8 +626,8 @@ public class ApiVerticle extends AbstractVerticle {
                 client
                   .post(yuuvisport, yuuvisuri, "/api/dms/objects")
                   .timeout(10000)
-                  .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                  .basicAuthentication("root", "optimalsystem")
+                  .putHeader("X-ID-TENANT-NAME", TENANT)
+                  .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                   .sendJsonObject(yuuvisDocuments)
                   .onSuccess(ar -> {
                     HttpResponse<Buffer> response = ar;
@@ -643,7 +680,7 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject properties = new JsonObject();
 
             JsonObject systemObject = new JsonObject();
-            systemObject.put("value","tenYuuvistest:fallakteneo");
+            systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
             properties.put("system:objectTypeId",systemObject);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
@@ -732,10 +769,10 @@ public class ApiVerticle extends AbstractVerticle {
 
             JsonObject yuuvisQuery = new JsonObject();
             if (requestBody.getJsonObject("vorgang").getString("register").isEmpty()) {
-              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'");
+              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'");
             } else {
-              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'" +
-                " AND tenYuuvistest:register = '" + requestBody.getJsonObject("vorgang").getString("register") + "'");
+              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getJsonObject("vorgang").getString("id") + "'" +
+                " AND " + TABLENAME  +  ":" + "register = '" + requestBody.getJsonObject("vorgang").getString("register") + "'");
             }
             yuuvisQuery.put("skipCount",0);
             yuuvisQuery.put("maxItems",50);
@@ -745,8 +782,8 @@ public class ApiVerticle extends AbstractVerticle {
             client
               .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
               .timeout(20000)
-              .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-              .basicAuthentication("root", "optimalsystem")
+              .putHeader("X-ID-TENANT-NAME", TENANT)
+              .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
               .sendJsonObject(yuuvisQueryObject)
               .onSuccess(sr -> {
                 HttpResponse<Buffer> responseQuery = sr;
@@ -762,8 +799,8 @@ public class ApiVerticle extends AbstractVerticle {
                   client
                     .post(yuuvisport, yuuvisuri, "/api/dms/objects/" + objectId)
                     .timeout(10000)
-                    .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                    .basicAuthentication("root", "optimalsystem")
+                    .putHeader("X-ID-TENANT-NAME", TENANT)
+                    .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                     .sendJsonObject(yuuvisDocuments)
                     .onSuccess(ar -> {
                       HttpResponse<Buffer> response = ar;
@@ -809,7 +846,7 @@ public class ApiVerticle extends AbstractVerticle {
           String param = routingContext.pathParam("vorgangsId");
           System.out.println("entered handler by id Fallakte_Get vorgangsId: " + param);
           JsonObject yuuvisQuery = new JsonObject();
-          yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + param + "'");
+          yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + param + "'");
           yuuvisQuery.put("skipCount",0);
           yuuvisQuery.put("maxItems",50);
           JsonObject yuuvisQueryObject = new JsonObject();
@@ -818,8 +855,8 @@ public class ApiVerticle extends AbstractVerticle {
           client
             .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
             .timeout(20000)
-            .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-            .basicAuthentication("root", "optimalsystem")
+            .putHeader("X-ID-TENANT-NAME", TENANT)
+            .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(ar -> {
               HttpResponse<Buffer> responseQuery = ar;
@@ -835,48 +872,48 @@ public class ApiVerticle extends AbstractVerticle {
 //                JsonObject klientAkte = new JsonObject();
 //                klientAkte.put("eAktenID","");
 //                JsonObject klient = new JsonObject();
-//                klient.put("vorname",searchProperties.getJsonObject("tenYuuvistest:vorname").getString("value"));
-//                klient.put("nachname",searchProperties.getJsonObject("tenYuuvistest:nachname").getString("value"));
-//                klient.put("id",searchProperties.getJsonObject("tenYuuvistest:id").getString("value"));
-//                klient.put("geburtsdatum",searchProperties.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
-//                klient.put("adresse",searchProperties.getJsonObject("tenYuuvistest:adresse").getString("value"));
+//                klient.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vorname").getString("value"));
+//                klient.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachname").getString("value"));
+//                klient.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "id").getString("value"));
+//                klient.put("geburtsdatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "geburtsdatum").getString("value"));
+//                klient.put("adresse",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "adresse").getString("value"));
 //                klientAkte.put("klient", klient);
-//                klientAkte.put("archivieren",searchProperties.getJsonObject("tenYuuvistest:archivieren").getString("value"));
-//                klientAkte.put("archivierenDatum",searchProperties.getJsonObject("tenYuuvistest:archivdatum").getString("value"));
-//                klientAkte.put("loeschen",searchProperties.getJsonObject("tenYuuvistest:loeschen").getString("value"));
-//                klientAkte.put("loeschenDatum",searchProperties.getJsonObject("tenYuuvistest:loeschdatum").getString("value"));
+//                klientAkte.put("archivieren",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivieren").getString("value"));
+//                klientAkte.put("archivierenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivdatum").getString("value"));
+//                klientAkte.put("loeschen",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschen").getString("value"));
+//                klientAkte.put("loeschenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschdatum").getString("value"));
 
                 JsonObject fallAkte = new JsonObject();
                 fallAkte.put("eAktenID","");
                 JsonObject vorgang = new JsonObject();
-                vorgang.put("aktenzeichen",searchProperties.getJsonObject("tenYuuvistest:aktenzeichen").getString("value"));
-                vorgang.put("archivieren",searchProperties.getJsonObject("tenYuuvistest:archivieren").getString("value"));
-                vorgang.put("archivierenDatum",searchProperties.getJsonObject("tenYuuvistest:archivdatum").getString("value"));
-                vorgang.put("bemerkung",searchProperties.getJsonObject("tenYuuvistest:Bemerkung").getString("value"));
-                vorgang.put("id",searchProperties.getJsonObject("tenYuuvistest:vorgangsid").getString("value"));
-                vorgang.put("loeschen",searchProperties.getJsonObject("tenYuuvistest:loeschen").getString("value"));
-                vorgang.put("loeschenDatum",searchProperties.getJsonObject("tenYuuvistest:loeschdatum").getString("value"));
-                vorgang.put("rechtsgebiet",searchProperties.getJsonObject("tenYuuvistest:rechtsgebiet").getString("value"));
-                vorgang.put("register",searchProperties.getJsonObject("tenYuuvistest:register").getString("value"));
-                vorgang.put("zustaendigerSachbearbeiter",searchProperties.getJsonObject("tenYuuvistest:sachbearbeiter").getString("value"));
+                vorgang.put("aktenzeichen",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "aktenzeichen").getString("value"));
+                vorgang.put("archivieren",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivieren").getString("value"));
+                vorgang.put("archivierenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivdatum").getString("value"));
+                vorgang.put("bemerkung",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "Bemerkung").getString("value"));
+                vorgang.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vorgangsid").getString("value"));
+                vorgang.put("loeschen",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschen").getString("value"));
+                vorgang.put("loeschenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschdatum").getString("value"));
+                vorgang.put("rechtsgebiet",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "rechtsgebiet").getString("value"));
+                vorgang.put("register",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "register").getString("value"));
+                vorgang.put("zustaendigerSachbearbeiter",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "sachbearbeiter").getString("value"));
                 fallAkte.put("vorgang", vorgang);
                 JsonObject personBaseExtended1 = new JsonObject();
-                personBaseExtended1.put("vorname",searchProperties.getJsonObject("tenYuuvistest:vornameAntragsteller").getString("value"));
-                personBaseExtended1.put("nachname",searchProperties.getJsonObject("tenYuuvistest:nachnameAntragsteller").getString("value"));
-                personBaseExtended1.put("id",searchProperties.getJsonObject("tenYuuvistest:idAntragsteller").getString("value"));
-                personBaseExtended1.put("geburtsdatum",searchProperties.getJsonObject("tenYuuvistest:geburtsdatumAntragsteller").getString("value"));
+                personBaseExtended1.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vornameAntragsteller").getString("value"));
+                personBaseExtended1.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachnameAntragsteller").getString("value"));
+                personBaseExtended1.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "idAntragsteller").getString("value"));
+                personBaseExtended1.put("geburtsdatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "geburtsdatumAntragsteller").getString("value"));
                 fallAkte.put("antragssteller", personBaseExtended1);
                 JsonObject personBaseExtended2 = new JsonObject();
-                personBaseExtended2.put("vorname",searchProperties.getJsonObject("tenYuuvistest:vorname").getString("value"));
-                personBaseExtended2.put("nachname",searchProperties.getJsonObject("tenYuuvistest:nachname").getString("value"));
-                personBaseExtended2.put("id",searchProperties.getJsonObject("tenYuuvistest:id").getString("value"));
-                personBaseExtended2.put("geburtsdatum",searchProperties.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
+                personBaseExtended2.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vorname").getString("value"));
+                personBaseExtended2.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachname").getString("value"));
+                personBaseExtended2.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "id").getString("value"));
+                personBaseExtended2.put("geburtsdatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "geburtsdatum").getString("value"));
                 fallAkte.put("leistungsempfaenger", personBaseExtended2);
                 JsonObject personBaseExtended3 = new JsonObject();
-                personBaseExtended3.put("vorname",searchProperties.getJsonObject("tenYuuvistest:vornameUnterhaltspflichtiger").getString("value"));
-                personBaseExtended3.put("nachname",searchProperties.getJsonObject("tenYuuvistest:nachnameUnterhaltspflichtiger").getString("value"));
-                personBaseExtended3.put("id",searchProperties.getJsonObject("tenYuuvistest:idUnterhaltspflichtiger").getString("value"));
-                personBaseExtended3.put("geburtsdatum",searchProperties.getJsonObject("tenYuuvistest:geburtsdatumUnterhaltspflichtiger").getString("value"));
+                personBaseExtended3.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vornameUnterhaltspflichtiger").getString("value"));
+                personBaseExtended3.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachnameUnterhaltspflichtiger").getString("value"));
+                personBaseExtended3.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "idUnterhaltspflichtiger").getString("value"));
+                personBaseExtended3.put("geburtsdatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "geburtsdatumUnterhaltspflichtiger").getString("value"));
                 fallAkte.put("unterhaltspflichtiger", personBaseExtended3);
 
                 routingContext
@@ -913,7 +950,7 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject properties = new JsonObject();
 
             JsonObject systemObject = new JsonObject();
-            systemObject.put("value","tenYuuvistest:klientakteneo");
+            systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
@@ -960,7 +997,7 @@ public class ApiVerticle extends AbstractVerticle {
             yuuvisDocuments.put("objects",yuuvisObjects);
 
             JsonObject yuuvisQuery = new JsonObject();
-            yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:klientakteneo WHERE tenYuuvistest:id = '" + requestBody.getJsonObject("klient").getString("id") + "'");
+            yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneo WHERE " + TABLENAME  +  ":" + "id = '" + requestBody.getJsonObject("klient").getString("id") + "'");
             yuuvisQuery.put("skipCount",0);
             yuuvisQuery.put("maxItems",50);
             JsonObject yuuvisQueryObject = new JsonObject();
@@ -969,8 +1006,8 @@ public class ApiVerticle extends AbstractVerticle {
             client
               .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
               .timeout(20000)
-              .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-              .basicAuthentication("root", "optimalsystem")
+              .putHeader("X-ID-TENANT-NAME", TENANT)
+              .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
               .sendJsonObject(yuuvisQueryObject)
               .onSuccess(sr -> {
                 HttpResponse<Buffer> responseQuery = sr;
@@ -982,8 +1019,8 @@ public class ApiVerticle extends AbstractVerticle {
                   client
                     .post(yuuvisport, yuuvisuri, "/api/dms/objects")
                     .timeout(10000)
-                    .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                    .basicAuthentication("root", "optimalsystem")
+                    .putHeader("X-ID-TENANT-NAME", TENANT)
+                    .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                     .sendJsonObject(yuuvisDocuments)
                     .onSuccess(ar -> {
                       HttpResponse<Buffer> response = ar;
@@ -1030,7 +1067,7 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject properties = new JsonObject();
 
             JsonObject systemObject = new JsonObject();
-            systemObject.put("value","tenYuuvistest:klientakteneo");
+            systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
@@ -1079,7 +1116,7 @@ public class ApiVerticle extends AbstractVerticle {
             String param = requestBody.getJsonObject("klient").getString("id");
             System.out.println("entered handler by id Dokument_Get eDokumentenID: " + param);
             JsonObject yuuvisQuery = new JsonObject();
-            yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:klientakteneo WHERE tenYuuvistest:id = '" + param + "'");
+            yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneo WHERE " + TABLENAME  +  ":" + "id = '" + param + "'");
             yuuvisQuery.put("skipCount",0);
             yuuvisQuery.put("maxItems",50);
             JsonObject yuuvisQueryObject = new JsonObject();
@@ -1089,8 +1126,8 @@ public class ApiVerticle extends AbstractVerticle {
             client
               .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
               .timeout(20000)
-              .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-              .basicAuthentication("root", "optimalsystem")
+              .putHeader("X-ID-TENANT-NAME", TENANT)
+              .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
               .sendJsonObject(yuuvisQueryObject)
               .onSuccess(sr -> {
                 HttpResponse<Buffer> responseQuery = sr;
@@ -1106,8 +1143,8 @@ public class ApiVerticle extends AbstractVerticle {
                   client
                     .post(yuuvisport, yuuvisuri, "/api/dms/objects/" + objectId)
                     .timeout(10000)
-                    .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-                    .basicAuthentication("root", "optimalsystem")
+                    .putHeader("X-ID-TENANT-NAME", TENANT)
+                    .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
                     .sendJsonObject(yuuvisDocuments)
                     .onSuccess(ar -> {
                       HttpResponse<Buffer> response = ar;
@@ -1148,13 +1185,13 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject yuuvisQuery = new JsonObject();
 //          if (fallakte) {
 //            if (requestBody.getString("Fallakte.Vorgang.Register").isEmpty()) {
-//              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'");
+//              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'");
 //            } else {
-//              yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:fallakteneo WHERE tenYuuvistest:vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'" +
-//                " AND tenYuuvistest:register = '" + requestBody.getString("Fallakte.Vorgang.Register") + "'");
+//              yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "fallakteneo WHERE " + TABLENAME  +  ":" + "vorgangsid = '" + requestBody.getString("Fallakte.Vorgang.ID") + "'" +
+//                " AND " + TABLENAME  +  ":" + "register = '" + requestBody.getString("Fallakte.Vorgang.Register") + "'");
 //            }
 //          } else {
-          yuuvisQuery.put("statement", "SELECT * FROM tenYuuvistest:klientakteneo WHERE tenYuuvistest:id = '" + param + "'");
+          yuuvisQuery.put("statement", "SELECT * FROM " + TABLENAME  +  ":" + "klientakteneo WHERE " + TABLENAME  +  ":" + "id = '" + param + "'");
 //          }
           yuuvisQuery.put("skipCount",0);
           yuuvisQuery.put("maxItems",50);
@@ -1164,8 +1201,8 @@ public class ApiVerticle extends AbstractVerticle {
           client
             .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
             .timeout(20000)
-            .putHeader("X-ID-TENANT-NAME", "yuuvistest")
-            .basicAuthentication("root", "optimalsystem")
+            .putHeader("X-ID-TENANT-NAME", TENANT)
+            .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
             .sendJsonObject(yuuvisQueryObject)
             .onSuccess(ar -> {
               HttpResponse<Buffer> responseQuery = ar;
@@ -1181,16 +1218,16 @@ public class ApiVerticle extends AbstractVerticle {
                 JsonObject klientAkte = new JsonObject();
                 klientAkte.put("eAktenID","");
                 JsonObject klient = new JsonObject();
-                klient.put("vorname",searchProperties.getJsonObject("tenYuuvistest:vorname").getString("value"));
-                klient.put("nachname",searchProperties.getJsonObject("tenYuuvistest:nachname").getString("value"));
-                klient.put("id",searchProperties.getJsonObject("tenYuuvistest:id").getString("value"));
-                klient.put("geburtsdatum",searchProperties.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
-                klient.put("adresse",searchProperties.getJsonObject("tenYuuvistest:adresse").getString("value"));
+                klient.put("vorname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "vorname").getString("value"));
+                klient.put("nachname",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "nachname").getString("value"));
+                klient.put("id",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "id").getString("value"));
+                klient.put("geburtsdatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "geburtsdatum").getString("value"));
+                klient.put("adresse",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "adresse").getString("value"));
                 klientAkte.put("klient", klient);
-                klientAkte.put("archivieren",searchProperties.getJsonObject("tenYuuvistest:archivieren").getString("value"));
-                klientAkte.put("archivierenDatum",searchProperties.getJsonObject("tenYuuvistest:archivdatum").getString("value"));
-                klientAkte.put("loeschen",searchProperties.getJsonObject("tenYuuvistest:loeschen").getString("value"));
-                klientAkte.put("loeschenDatum",searchProperties.getJsonObject("tenYuuvistest:loeschdatum").getString("value"));
+                klientAkte.put("archivieren",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivieren").getString("value"));
+                klientAkte.put("archivierenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "archivdatum").getString("value"));
+                klientAkte.put("loeschen",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschen").getString("value"));
+                klientAkte.put("loeschenDatum",searchProperties.getJsonObject("" + TABLENAME  +  ":" + "loeschdatum").getString("value"));
 
                 routingContext
                   .response() // <1>
@@ -1378,7 +1415,7 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject properties = new JsonObject();
 
     JsonObject systemObject = new JsonObject();
-    systemObject.put("value", "tenYuuvistest:fallakteneodokument");
+    systemObject.put("value", "" + TABLENAME  +  ":" + "fallakteneodokument");
     properties.put("system:objectTypeId", systemObject);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);
@@ -1466,7 +1503,7 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject properties = new JsonObject();
 
     JsonObject systemObject = new JsonObject();
-    systemObject.put("value", "tenYuuvistest:klientakteneodokument");
+    systemObject.put("value", "" + TABLENAME  +  ":" + "klientakteneodokument");
     properties.put("system:objectTypeId", systemObject);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);

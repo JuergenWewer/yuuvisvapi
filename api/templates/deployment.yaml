@@ -15,8 +15,34 @@ spec:
     spec:
       containers:
       - name: yuuvis-api
-        image: jw-cloud.org:8443/yuuvis-v-api:2.0.1-SNAPSHOT
+        image: jw-cloud.org:8443/yuuvis-v-api:2.1.0-SNAPSHOT
         ports:
         - containerPort: 8080
+        env:
+          - name: TENANT
+            valueFrom:
+              configMapKeyRef:
+                name: yuuvisapiconfigmap
+                key: tenant
+          - name: USER
+            valueFrom:
+              secretKeyRef:
+                name: yuuvissecret
+                key: username
+          - name: PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: yuuvissecret
+                key: password
+          - name: YUUVISUSER
+            valueFrom:
+              secretKeyRef:
+                name: yuuvissecret
+                key: yuuvisusername
+          - name: YUUVISPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: yuuvissecret
+                key: yuuvispassword
       imagePullSecrets:
         - name: jwcloudcred
