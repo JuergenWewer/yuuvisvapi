@@ -44,5 +44,13 @@ spec:
               secretKeyRef:
                 name: yuuvissecret
                 key: yuuvispassword
+        volumeMounts:
+        - name: config-volume
+          mountPath: /src/main/resources/dist/openapi3.yaml
+          subPath: openapi3.yaml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: openapi-configmap
       imagePullSecrets:
         - name: jwcloudcred

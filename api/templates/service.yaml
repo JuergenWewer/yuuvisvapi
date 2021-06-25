@@ -10,5 +10,6 @@ spec:
   ports:
     # the port that this service should serve on
   - port: 8080
+    nodePort: {{ .Values.serverport }}
   selector:
     app: yuuvis-api

@@ -117,7 +117,8 @@ neu:
 
 kubectl create secret generic regcred \
 --from-file=.dockerconfigjson=/root/.docker/config.json \
---type=kubernetes.io/dockerconfigjson --dry-run=client  --output=yaml > optimal-secrets.yaml
+--type=kubernetes.io/dockerconfigjson
+--dry-run=client  --output=yaml > optimal-secrets.yaml
 
 neu:
 kubectl create secret generic jwcloudcred \
@@ -159,10 +160,12 @@ deploy the application:
 edit the version in api helm - deployment.yaml in the image:
 helm install yuuvis-v-api api
 
+for testing the syntax:
+helm install -f macprovalue.yaml yuuvis-v-api api --dry-run
+
 ##############################################################################
 helm uninstall yuuvis-v-api
 helm uninstall nexus
-
 
 ######################################################################
 deploy on azure
@@ -176,10 +179,29 @@ helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install nexus nexus
 
 2. deploy service and application
    helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall yuuvis-v-api
-helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install yuuvis-v-api api
+helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config -f azurevalue.yaml install yuuvis-v-api api
 
 3. create ingress
    helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install ingress ingress
    helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall ingress
 #######################################################################
 
+########################################################################
+swagger ui access
+#######################################################################
+
+ip vom Kubernetes Cluster:
+z.b: macpro:
+10.211.55.4
+
+port of yuuvis-api service: 31597
+
+http://10.211.55.4:31597/swagger/ui/
+
+bzw. im yuuvis-api pod:
+curl -v localhost:8080/swagger/ui/
+
+Aufruf der routen im Browser:
+10.211.55.4:31597/api/Klientakte/klientID
+
+#########################################################################
