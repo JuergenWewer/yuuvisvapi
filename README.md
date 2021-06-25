@@ -158,7 +158,8 @@ api/templates/deployment.yaml
 deploy the application:
 
 edit the version in api helm - deployment.yaml in the image:
-helm install yuuvis-v-api api
+helm install -f macprovalue.yaml yuuvis-v-api api
+helm install -f optimalvalue.yaml yuuvis-v-api api
 
 for testing the syntax:
 helm install -f macprovalue.yaml yuuvis-v-api api --dry-run
