@@ -28,11 +28,11 @@ public class ApiVerticleTest {
   private CountDownLatch producerReadyLatch = new CountDownLatch(1);
   private static Vertx vertx = Vertx.vertx();
 
-  private String apiurl = "localhost";
-  private int apiport = 8080;
+//  private String apiurl = "localhost";
+//  private int apiport = 8080;
 
-//  private String apiurl = "10.211.55.4";
-//  private int apiport = 31367;
+  private String apiurl = "10.211.55.4";
+  private int apiport = 30036;
 
 
   @BeforeEach
@@ -41,6 +41,7 @@ public class ApiVerticleTest {
     newEnv.put("AUTHENTICATION_SERVICE_HOST", "10.211.55.4");
     newEnv.put("AUTHENTICATION_SERVICE_PORT", "30080");
     newEnv.put("TENANT", "yuuvistest");
+    newEnv.put("SERVERURL", apiurl + ":" + apiport);
     newEnv.put("USER", "yuuvis");
     newEnv.put("PASSWORD", "optimalsystem");
     newEnv.put("YUUVISUSER", "root");
@@ -680,7 +681,7 @@ public class ApiVerticleTest {
     }
   }
 
-///////////////    Get Dokument  KlientID
+///////////////    Get GetDokumente  KlientID
   @Test
   void testDokumentGETGetDokumeteKlientID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
@@ -707,7 +708,7 @@ public class ApiVerticleTest {
     }
   }
 
-///////////////     Get Dokument Fallakte
+///////////////     Get GetDokumente Fallakte
   @Test
   void testDokumentGETGetDokumeteVorgangID(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {

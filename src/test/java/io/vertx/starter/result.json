@@ -1,0 +1,54 @@
+{
+  "documents": [
+    {
+      "eDokumentenID": "PDF-Lizenz",
+      "erstellungZeitpunkt": "2021-02-18",
+      "typ": "Dokument.Typ",
+      "vorlage": "Dokument.Vorlage",
+      "sachbearbeiter": {
+        "vorname": "Dokument.Sachbearbeiter.Vorname",
+        "nachname": "Dokument.Sachbearbeiter.Nachname",
+        "kennung": "Dokument.Sachbearbeiter.Kennung"
+      },
+      "empfaenger": {
+        "vorname": "Dokument.Empfaenger.Vorname",
+        "nachname": "Dokument.Empfaenger.Nachname",
+        "adresse": "Dokument.Empfaenger.Adresse"
+      },
+      "klient": {
+        "vorname": "vorname",
+        "nachname": "nachname",
+        "id": "Klientid",
+        "geburtsdatum": "2003-02-18",
+        "adresse": "adresse"
+      },
+      "prosozDateiname": "Dokument.ProsozDateiname",
+      "contentUrl": "PDF-Lizenz"
+    },
+    {
+      "eDokumentenID": "PDF-Lizenz",
+      "erstellungZeitpunkt": "2021-02-18",
+      "typ": "Dokument.Typ",
+      "vorlage": "Dokument.Vorlage",
+      "sachbearbeiter": {
+        "vorname": "Dokument.Sachbearbeiter.Vorname",
+        "nachname": "Dokument.Sachbearbeiter.Nachname",
+        "kennung": "Dokument.Sachbearbeiter.Kennung"
+      },
+      "empfaenger": {
+        "vorname": "Dokument.Empfaenger.Vorname",
+        "nachname": "Dokument.Empfaenger.Nachname",
+        "adresse": "Dokument.Empfaenger.Adresse"
+      },
+      "klient": {
+        "vorname": "vorname",
+        "nachname": "nachname",
+        "id": "Klientid",
+        "geburtsdatum": "2003-02-18",
+        "adresse": "adresse"
+      },
+      "prosozDateiname": "Dokument.ProsozDateiname",
+      "contentUrl": "PDF-Lizenz"
+    }
+  ]
+}

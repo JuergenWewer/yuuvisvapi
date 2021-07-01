@@ -43,6 +43,7 @@ public class ApiVerticle extends AbstractVerticle {
   public static String yuuvisuri = null;
   public static int yuuvisport = 0;
   public static String TENANT = null;
+  public static String SERVERURL = null;
   public static String TABLENAME = null;
 
 
@@ -61,6 +62,11 @@ public class ApiVerticle extends AbstractVerticle {
     }
     String cap = TENANT.substring(0, 1).toUpperCase() + TENANT.substring(1);
     TABLENAME = "ten" + cap;
+    if (System.getenv("SERVERURL") != null) {
+      SERVERURL = System.getenv("SERVERURL");
+    } else {
+      SERVERURL = "localhost:8080";
+    }
     if (System.getenv("USER") != null) {
       USER = System.getenv("USER");
     } else {
@@ -84,6 +90,7 @@ public class ApiVerticle extends AbstractVerticle {
     System.out.println("yuuvisuri: " + yuuvisuri);
     System.out.println("yuuvisport: " + yuuvisport);
     System.out.println("TENANT: " + TENANT);
+    System.out.println("SERVERURL: " + SERVERURL);
     System.out.println("TABLENAME: " + TABLENAME);
     System.out.println("USER: " + USER);
     System.out.println("PASSWORD: " + PASSWORD.substring(0, 2) + "...");
@@ -477,17 +484,51 @@ public class ApiVerticle extends AbstractVerticle {
                 JsonObject yuuvisSearch = new JsonObject(responseQuery.bodyAsString());
                 int results = yuuvisSearch.getInteger("numItems");
                 if (responseQuery.statusCode() == 200 && results >= 1) {
-                  routingContext
-                    .response()
-                    .setStatusCode(200)
-                    .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                    .end(yuuvisSearch.encode());
+                  JsonArray yuuvisSearchObjects = yuuvisSearch.getJsonArray("objects");
+                  JsonObject yuuvisSearchObject = yuuvisSearchObjects.getJsonObject(0);
+                  JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
+                  String objectId = searchProperties.getJsonObject("system:objectId").getString("value");
+
+                  JsonObject yuuvisQueryDocs = new JsonObject();
+                  if (fallakte) {
+                    yuuvisQueryDocs.put("statement", "SELECT * FROM " + TABLENAME + ":" + "fallakteneodokument WHERE system:parentId = '" + objectId + "'");
+                  } else {
+                    yuuvisQueryDocs.put("statement", "SELECT * FROM " + TABLENAME + ":" + "klientakteneodokument WHERE system:parentId = '" + objectId + "'");
+                  }
+                  yuuvisQueryDocs.put("skipCount",0);
+                  yuuvisQueryDocs.put("maxItems",50);
+                  JsonObject yuuvisQueryDocsObject = new JsonObject();
+                  yuuvisQueryDocsObject.put("query", yuuvisQueryDocs);
+                  client
+                    .post(yuuvisport, yuuvisuri, "/api/dms/objects/search")
+                    .timeout(20000)
+                    .putHeader("X-ID-TENANT-NAME", TENANT)
+                    .basicAuthentication(YUUVISUSER, YUUVISPASSWORD)
+                    .sendJsonObject(yuuvisQueryDocsObject)
+                    .onSuccess(srd -> {
+                      HttpResponse<Buffer> responseQueryDocs = srd;
+                      System.out.println("Received yuuvis Query response with status code: " + responseQueryDocs.statusCode() + " " + responseQueryDocs.statusMessage());
+                      System.out.println("Received yuuvis Query response with body: " + responseQueryDocs.bodyAsString());
+                      JsonObject yuuvisSearchDocs = new JsonObject(responseQueryDocs.bodyAsString());
+                      JsonObject searchResult = getDokument(yuuvisSearchDocs,fallakte,searchProperties);
+                      routingContext
+                        .response()
+                        .setStatusCode(200)
+                        .putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                        .end(searchResult.encode());
+                    })
+                    .onFailure(err -> {
+                      System.out.println("Something went wrong " + err.getMessage());
+                      routingContext
+                        .end(err.getMessage());
+
+                    });
                 } else {
                   routingContext
                     .response() // <1>
-                    .setStatusCode(409)
+                    .setStatusCode(204)
                     .putHeader(HttpHeaders.CONTENT_TYPE, "text") // <2>
-                    .end("Die VorgangsID oder das Register/der Unterordner existiert im enaio® nicht."); // <3>
+                    .end("Die KlientID/VorgangsID oder das Register/der Unterordner existiert im enaio® nicht."); // <3>
                 }
               })
               .onFailure(err -> {
@@ -1400,6 +1441,72 @@ public class ApiVerticle extends AbstractVerticle {
             });
       })
       .onFailure(startPromise::fail);
+  }
+
+  private JsonObject getDokument(JsonObject yuuvisSearch, boolean fallakte, JsonObject klientFolder) {
+    JsonObject yuuvisDocuments = new JsonObject();
+    JsonArray yuuvisObjects = new JsonArray();
+    JsonObject yuuvisObject = new JsonObject();
+    JsonObject properties = new JsonObject();
+
+    JsonObject klient = new JsonObject();
+    if (fallakte) {
+      klient.put("vorname","");
+      klient.put("nachname","");
+      klient.put("id","");
+      klient.put("geburtsdatum","");
+      klient.put("adresse","");
+    } else {
+      klient.put("vorname",klientFolder.getJsonObject("tenYuuvistest:vorname").getString("value"));
+      klient.put("nachname",klientFolder.getJsonObject("tenYuuvistest:nachname").getString("value"));
+      klient.put("id",klientFolder.getJsonObject("tenYuuvistest:id").getString("value"));
+      klient.put("geburtsdatum",klientFolder.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
+      klient.put("adresse",klientFolder.getJsonObject("tenYuuvistest:adresse").getString("value"));
+    }
+
+    JsonArray yuuvisSearchObjects = yuuvisSearch.getJsonArray("objects");
+    for (int i = 0; i< yuuvisSearchObjects.size(); i++) {
+      JsonObject yuuvisSearchObject = yuuvisSearchObjects.getJsonObject(i);
+      JsonObject searchProperties = yuuvisSearchObject.getJsonObject("properties");
+
+      yuuvisObject.put("eDokumentenID",searchProperties.getJsonObject("tenYuuvistest:edokumentenid").getString("value"));
+      yuuvisObject.put("erstellungZeitpunkt",searchProperties.getJsonObject("tenYuuvistest:erstelldatum").getString("value"));
+      yuuvisObject.put("typ",searchProperties.getJsonObject("tenYuuvistest:dokumenttyp").getString("value"));
+      yuuvisObject.put("vorlage",searchProperties.getJsonObject("tenYuuvistest:vorlage").getString("value"));
+
+      JsonObject sachbearbeiter = new JsonObject();
+      JsonObject vornamesachbearbeiter = searchProperties.getJsonObject("tenYuuvistest:vornamesachbearbeiter");
+      String vorname = vornamesachbearbeiter.getString("value");
+      sachbearbeiter.put("vorname", vorname);
+      JsonObject nachnamesachbearbeiter = searchProperties.getJsonObject("tenYuuvistest:nachnamesachbearbeiter");
+      String nachname = nachnamesachbearbeiter.getString("value");
+      sachbearbeiter.put("nachname", nachname);
+      JsonObject kennungsachbearbeiter = searchProperties.getJsonObject("tenYuuvistest:kennungsachbearbeiter");
+      String kennung = kennungsachbearbeiter.getString("value");
+      sachbearbeiter.put("kennung", kennung);
+      yuuvisObject.put("sachbearbeiter", sachbearbeiter);
+
+      JsonObject empfaenger = new JsonObject();
+      JsonObject vornameempfaenger = searchProperties.getJsonObject("tenYuuvistest:vornameempfaenger");
+      vorname = vornameempfaenger.getString("value");
+      empfaenger.put("vorname", vorname);
+      JsonObject nachnameempfaenger = searchProperties.getJsonObject("tenYuuvistest:nachnameempfaenger");
+      nachname = nachnameempfaenger.getString("value");
+      empfaenger.put("nachname", nachname);
+      JsonObject kennungempfaenger = searchProperties.getJsonObject("tenYuuvistest:kennungempfaenger");
+      String adresse = kennungempfaenger.getString("value");
+      empfaenger.put("adresse", adresse);
+      yuuvisObject.put("empfaenger", empfaenger);
+
+      yuuvisObject.put("klient", klient);
+
+      yuuvisObject.put("prosozDateiname",searchProperties.getJsonObject("tenYuuvistest:dateiname").getString("value"));
+      yuuvisObject.put("contentUrl",SERVERURL + "/api/Dokument?eDokumentenID=" + searchProperties.getJsonObject("tenYuuvistest:edokumentenid").getString("value"));
+
+      yuuvisObjects.add(yuuvisObject);
+    }
+    yuuvisDocuments.put("documents", yuuvisObjects);
+    return yuuvisDocuments;
   }
 
   private JsonObject getFallakteDokument(String name, String fileName, String fileType, JsonObject requestBody, JsonObject yuuvisSearch, int yuuvisSearchIndex) {

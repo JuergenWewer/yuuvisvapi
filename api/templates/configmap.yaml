@@ -5,3 +5,4 @@ metadata:
   namespace: yuuvis
 data:
   tenant: yuuvistest
+  serverurl: '{{ .Values.serverurl }}{{ if .Values.serverport }}:{{ .Values.serverport }}{{ end }}'

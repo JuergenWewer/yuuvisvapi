@@ -178,8 +178,9 @@ kubectl get pods --namespace=yuuvis --kubeconfig=/Users/wewer/Optimal/kube_Azure
 1. create nexus secret - once
 helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config install nexus nexus
 
-2. deploy service and application
-   helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall yuuvis-v-api
+2. deploy service and application:
+
+helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config uninstall yuuvis-v-api
 helm --kubeconfig /Users/wewer/Optimal/kube_Azure.config -f azurevalue.yaml install yuuvis-v-api api
 
 3. create ingress
@@ -206,3 +207,5 @@ Aufruf der routen im Browser:
 10.211.55.4:31597/api/Klientakte/klientID
 
 #########################################################################
+
+
