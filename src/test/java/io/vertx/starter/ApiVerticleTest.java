@@ -28,11 +28,11 @@ public class ApiVerticleTest {
   private CountDownLatch producerReadyLatch = new CountDownLatch(1);
   private static Vertx vertx = Vertx.vertx();
 
-//  private String apiurl = "localhost";
-//  private int apiport = 8080;
+  private String apiurl = "localhost";
+  private int apiport = 8080;
 
-  private String apiurl = "10.211.55.4";
-  private int apiport = 30036;
+//  private String apiurl = "10.211.55.4";
+//  private int apiport = 30036;
 
 
   @BeforeEach
@@ -376,7 +376,7 @@ public class ApiVerticleTest {
       client
         .get(apiport, apiurl, "/api/Dokument")
         .basicAuthentication("yuuvis", "optimalsystem")
-        .addQueryParam("eDokumentenID", "EMail-08.05.2021")
+        .addQueryParam("eDokumentenID", "12345678901")
         .send()
         .onSuccess(ar -> {
           HttpResponse<Buffer> response = ar;
@@ -404,7 +404,7 @@ public class ApiVerticleTest {
       client
         .get(apiport, apiurl, "/api/Dokument")
         .basicAuthentication("yuuvis", "optimalsystem")
-        .addQueryParam("eDokumentenID", "PDF-Lizenz")
+        .addQueryParam("eDokumentenID", "012345678900")
         .send()
         .onSuccess(ar -> {
           HttpResponse<Buffer> response = ar;
@@ -466,7 +466,7 @@ public class ApiVerticleTest {
       dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
       dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
       dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
-      dokument.put("Dokument.EDokumentenID","EMail-08.05.2021");
+      dokument.put("Dokument.EDokumentenID","012345678901");
       dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
       dokument.put("Dokument.Typ","Dokument.Typ");
       dokument.put("Dokument.Vorlage","Dokument.Vorlage");
@@ -552,7 +552,7 @@ public class ApiVerticleTest {
       dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
       dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
       dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
-      dokument.put("Dokument.EDokumentenID","Dokument.EDokumentenID");
+      dokument.put("Dokument.EDokumentenID","012345678901");
       dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
       dokument.put("Dokument.Typ","Dokument.Typ");
       dokument.put("Dokument.Vorlage","Dokument.Vorlage");
@@ -640,7 +640,7 @@ public class ApiVerticleTest {
       dokument.put("Klientakte.Loeschen","Klientakte.Loeschen");
       dokument.put("Klientakte.LoeschenDatum","Klientakte.LoeschenDatum");
       dokument.put("Klientakte.OrdnerObjektTypName","Klientakte.OrdnerObjektTypName");
-      dokument.put("Dokument.EDokumentenID","PDF-Lizenz");
+      dokument.put("Dokument.EDokumentenID","012345678900");
       dokument.put("Dokument.ErstellungZeitpunkt","2021-02-18");
       dokument.put("Dokument.Typ","Dokument.Typ");
       dokument.put("Dokument.Vorlage","Dokument.Vorlage");
@@ -660,7 +660,7 @@ public class ApiVerticleTest {
           "File",
           "Lizenz",
           "src/test/resources/LicenseCertificate-R5292742.pdf",
-          "application/pdf");
+          "application/octet-stream");
 
 
       WebClient clientFallakte = WebClient.create(this.vertx, options);

@@ -14,20 +14,21 @@ data:
     paths:
       /api/Dokument:
         get:
-          summary: Stellt die zur eDokumentenID gehörige Datei zur Verfügung
-          operationId: Dokument_Get
           tags:
             - Dokument
+          summary: Stellt die zur eDokumentenID gehörige Datei zur Verfügung
+          operationId: Dokument_Get
           parameters:
             - name: eDokumentenID
               in: query
               description: eDokumentenID des Dokuments
-              required: true
               schema:
-                type: string
+                type: integer
+                format: int64
+              x-position: 1
           responses:
             '200':
-              description: Dekument wurde gefunden und wird als Bytestream zurueckgegeben
+              description: Dokument wurde gefunden und wird als Bytestream zurückgegeben.
               content:
                 application/octet-stream:
                   schema:
@@ -52,7 +53,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
         post:
           tags:
             - Dokument
@@ -219,9 +220,6 @@ data:
                       type: string
                       format: binary
                       nullable: true
-                encoding:
-                  File:
-                    contentType: application/pdf, image/jpeg
           responses:
             '200':
               description: Dokument erfolgreich im enaio® angelegt.
@@ -242,13 +240,13 @@ data:
                   schema:
                     type: string
             '500':
-              description: Fehler bei der Kommunikation mit enaio® aufgetreten
+              description: Fehler bei der Kommunikation mit enaio® aufgetreten/Fehlermeldung im Body
               content:
                 application/json:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
       /api/Dokument/GetDokumente:
         get:
           tags:
@@ -281,10 +279,11 @@ data:
             '200':
               description: Akte gefunden - Dokumente werden zurückgeliefert.
               content:
-                application/octet-stream:
+                application/json:
                   schema:
-                    type: string
-                    format: binary
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dokument'
             '204':
               description: Die VorgangsID oder das Register/der Unterordner existiert im enaio® nicht.
               content:
@@ -304,7 +303,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
       '/api/Fallakte/{vorgangsId}':
         get:
           tags:
@@ -345,7 +344,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
       /api/Fallakte:
         post:
           tags:
@@ -386,7 +385,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
         put:
           tags:
             - Fallakte
@@ -427,7 +426,28 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
+      /Health:
+        get:
+          tags:
+            - Home
+          summary: Endpunkt zum Abfragen der Gesundheit des Dienstes bzw. seiner Abhängigkeiten
+          operationId: Home_Health
+          responses:
+            '200':
+              description: Service health is OK
+              content:
+                application/octet-stream:
+                  schema:
+                    type: string
+                    format: binary
+            '500':
+              description: Service health is NOT OK
+              content:
+                application/octet-stream:
+                  schema:
+                    type: string
+                    format: binary
       '/api/Klientakte/{klientId}':
         get:
           tags:
@@ -468,7 +488,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
       /api/Klientakte:
         post:
           tags:
@@ -509,7 +529,7 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
         put:
           tags:
             - Klientakte
@@ -549,49 +569,12 @@ data:
                   schema:
                     type: string
           security:
-            - httpBasicAuth: []
+            - Basic: []
     components:
       schemas:
-        FallakteDokument:
-          allOf:
-            - $ref: '#/components/schemas/Dokument'
-            - type: object
-              properties:
-                klient:
-                  nullable: true
-                  oneOf:
-                    - $ref: '#/components/schemas/Klient'
-        Klient:
-          allOf:
-            - $ref: '#/components/schemas/PersonBaseExtended'
-            - type: object
-              properties:
-                adresse:
-                  type: string
-                  nullable: true
-        PersonBaseExtended:
-          allOf:
-            - $ref: '#/components/schemas/PersonBase'
-            - type: object
-              properties:
-                id:
-                  type: string
-                  nullable: true
-                geburtsdatum:
-                  type: string
-                  nullable: true
-        PersonBase:
+        Dokument:
           type: object
-          description: ' '
-          properties:
-            vorname:
-              type: string
-              nullable: true
-            nachname:
-              type: string
-              nullable: true
-        DokumentPut:
-          type: object
+          additionalProperties: false
           properties:
             eDokumentenID:
               type: string
@@ -621,35 +604,69 @@ data:
               type: string
               description: URL unter welcher die Dokumentdatei abgerufen (GET) werden kann.
               nullable: true
-        Dokument:
-          type: object
-          properties:
-            Fallakte.EAktenID:
-              type: string
-              description: Eindeutige ID im enaio®
-              nullable: true
-            File:
-              type: string
-              format: binary
-              nullable: true
         Sachbearbeiter:
           allOf:
             - $ref: '#/components/schemas/PersonBase'
             - type: object
+              additionalProperties: false
               properties:
                 kennung:
                   type: string
                   nullable: true
+        PersonBase:
+          type: object
+          description: ' '
+          additionalProperties: false
+          properties:
+            vorname:
+              type: string
+              nullable: true
+            nachname:
+              type: string
+              nullable: true
         Empfaenger:
           allOf:
             - $ref: '#/components/schemas/PersonBase'
             - type: object
+              additionalProperties: false
               properties:
                 adresse:
                   type: string
                   nullable: true
+        FallakteDokument:
+          allOf:
+            - $ref: '#/components/schemas/Dokument'
+            - type: object
+              additionalProperties: false
+              properties:
+                klient:
+                  nullable: true
+                  oneOf:
+                    - $ref: '#/components/schemas/Klient'
+        Klient:
+          allOf:
+            - $ref: '#/components/schemas/PersonBaseExtended'
+            - type: object
+              additionalProperties: false
+              properties:
+                adresse:
+                  type: string
+                  nullable: true
+        PersonBaseExtended:
+          allOf:
+            - $ref: '#/components/schemas/PersonBase'
+            - type: object
+              additionalProperties: false
+              properties:
+                id:
+                  type: string
+                  nullable: true
+                geburtsdatum:
+                  type: string
+                  nullable: true
         Fallakte:
           type: object
+          additionalProperties: false
           properties:
             eAktenID:
               type: string
@@ -673,6 +690,7 @@ data:
                 - $ref: '#/components/schemas/Unterhaltspflichtiger'
         Vorgang:
           type: object
+          additionalProperties: false
           properties:
             aktenzeichen:
               type: string
@@ -708,16 +726,20 @@ data:
           allOf:
             - $ref: '#/components/schemas/PersonBaseExtended'
             - type: object
+              additionalProperties: false
         Leistungsempfaenger:
           allOf:
             - $ref: '#/components/schemas/PersonBaseExtended'
             - type: object
+              additionalProperties: false
         Unterhaltspflichtiger:
           allOf:
             - $ref: '#/components/schemas/PersonBaseExtended'
             - type: object
+              additionalProperties: false
         Klientakte:
           type: object
+          additionalProperties: false
           properties:
             eAktenID:
               type: string
@@ -740,9 +762,9 @@ data:
               type: string
               nullable: true
       securitySchemes:
-        httpBasicAuth:
+        Basic:
           type: http
+          description: Bitte Basic-Auth Credentials eingeben
           scheme: basic
-          description: ''
     security:
-      - httpBasicAuth: []
+      - Basic: []

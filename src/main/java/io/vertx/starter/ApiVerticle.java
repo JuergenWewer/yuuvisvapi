@@ -510,7 +510,7 @@ public class ApiVerticle extends AbstractVerticle {
                       System.out.println("Received yuuvis Query response with status code: " + responseQueryDocs.statusCode() + " " + responseQueryDocs.statusMessage());
                       System.out.println("Received yuuvis Query response with body: " + responseQueryDocs.bodyAsString());
                       JsonObject yuuvisSearchDocs = new JsonObject(responseQueryDocs.bodyAsString());
-                      JsonObject searchResult = getDokument(yuuvisSearchDocs,fallakte,searchProperties);
+                      JsonArray searchResult = getDokument(yuuvisSearchDocs,fallakte,searchProperties);
                       routingContext
                         .response()
                         .setStatusCode(200)
@@ -1293,7 +1293,8 @@ public class ApiVerticle extends AbstractVerticle {
         // end::Klientakte_Get[]
 
         AuthProvider authProvider = createBasicAuthProvider();
-        routerBuilder.securityHandler("httpBasicAuth", BasicAuthHandler.create(authProvider));
+//        routerBuilder.securityHandler("httpBasicAuth", BasicAuthHandler.create(authProvider));
+        routerBuilder.securityHandler("Basic", BasicAuthHandler.create(authProvider));
 
         // Generate the router
         // tag::routerGen[]
@@ -1443,26 +1444,26 @@ public class ApiVerticle extends AbstractVerticle {
       .onFailure(startPromise::fail);
   }
 
-  private JsonObject getDokument(JsonObject yuuvisSearch, boolean fallakte, JsonObject klientFolder) {
-    JsonObject yuuvisDocuments = new JsonObject();
+  private JsonArray getDokument(JsonObject yuuvisSearch, boolean fallakte, JsonObject klientFolder) {
+//    JsonObject yuuvisDocuments = new JsonObject();
     JsonArray yuuvisObjects = new JsonArray();
     JsonObject yuuvisObject = new JsonObject();
     JsonObject properties = new JsonObject();
 
-    JsonObject klient = new JsonObject();
-    if (fallakte) {
-      klient.put("vorname","");
-      klient.put("nachname","");
-      klient.put("id","");
-      klient.put("geburtsdatum","");
-      klient.put("adresse","");
-    } else {
-      klient.put("vorname",klientFolder.getJsonObject("tenYuuvistest:vorname").getString("value"));
-      klient.put("nachname",klientFolder.getJsonObject("tenYuuvistest:nachname").getString("value"));
-      klient.put("id",klientFolder.getJsonObject("tenYuuvistest:id").getString("value"));
-      klient.put("geburtsdatum",klientFolder.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
-      klient.put("adresse",klientFolder.getJsonObject("tenYuuvistest:adresse").getString("value"));
-    }
+//    JsonObject klient = new JsonObject();
+//    if (fallakte) {
+//      klient.put("vorname","");
+//      klient.put("nachname","");
+//      klient.put("id","");
+//      klient.put("geburtsdatum","");
+//      klient.put("adresse","");
+//    } else {
+//      klient.put("vorname",klientFolder.getJsonObject("tenYuuvistest:vorname").getString("value"));
+//      klient.put("nachname",klientFolder.getJsonObject("tenYuuvistest:nachname").getString("value"));
+//      klient.put("id",klientFolder.getJsonObject("tenYuuvistest:id").getString("value"));
+//      klient.put("geburtsdatum",klientFolder.getJsonObject("tenYuuvistest:geburtsdatum").getString("value"));
+//      klient.put("adresse",klientFolder.getJsonObject("tenYuuvistest:adresse").getString("value"));
+//    }
 
     JsonArray yuuvisSearchObjects = yuuvisSearch.getJsonArray("objects");
     for (int i = 0; i< yuuvisSearchObjects.size(); i++) {
@@ -1498,15 +1499,16 @@ public class ApiVerticle extends AbstractVerticle {
       empfaenger.put("adresse", adresse);
       yuuvisObject.put("empfaenger", empfaenger);
 
-      yuuvisObject.put("klient", klient);
+//      yuuvisObject.put("klient", klient);
 
       yuuvisObject.put("prosozDateiname",searchProperties.getJsonObject("tenYuuvistest:dateiname").getString("value"));
       yuuvisObject.put("contentUrl",SERVERURL + "/api/Dokument?eDokumentenID=" + searchProperties.getJsonObject("tenYuuvistest:edokumentenid").getString("value"));
 
       yuuvisObjects.add(yuuvisObject);
     }
-    yuuvisDocuments.put("documents", yuuvisObjects);
-    return yuuvisDocuments;
+//    yuuvisDocuments.put("documents", yuuvisObjects);
+//    return yuuvisDocuments;
+    return yuuvisObjects;
   }
 
   private JsonObject getFallakteDokument(String name, String fileName, String fileType, JsonObject requestBody, JsonObject yuuvisSearch, int yuuvisSearchIndex) {
