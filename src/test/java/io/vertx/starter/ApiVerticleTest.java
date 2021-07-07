@@ -81,6 +81,32 @@ public class ApiVerticleTest {
     }
   }
 
+
+  @Test
+  void testHealth(VertxTestContext testContext) throws Throwable {
+    if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {
+      WebClientOptions options = new WebClientOptions()
+        .setUserAgent("otto");
+      options.setKeepAlive(false);
+      System.out.println("start the webclient: testHealth");
+      WebClient client = WebClient.create(this.vertx, options);
+      client
+        .get(apiport, apiurl, "/Health")
+        .basicAuthentication("yuuvis", "optimalsystem")
+        .send()
+        .onSuccess(ar -> {
+          HttpResponse<Buffer> response = ar;
+          System.out.println("Received GET response with status code: " + response.statusCode() +" "+ response.statusMessage());
+          System.out.println("Received GET response body: " + response.bodyAsString());
+          testContext.completeNow();
+        })
+        .onFailure(err -> {
+          System.out.println("GET Something went wrong " + err.getMessage());
+          testContext.completeNow();
+        });
+    }
+  }
+
   @Test
   void testKlientaktePOST(VertxTestContext testContext) throws Throwable {
     if (producerReadyLatch.await(60, TimeUnit.SECONDS)) {

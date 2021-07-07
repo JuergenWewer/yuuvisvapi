@@ -107,6 +107,19 @@ public class ApiVerticle extends AbstractVerticle {
         // Add routes handlers
         System.out.println("routerbuilder succeed, build the routs");
 
+        // tag::Home_Health[]
+        routerBuilder.operation("Home_Health")
+          .handler(routingContext -> {
+            System.out.println("entered handler by id Home_Health");
+            routingContext
+              .response() // <1>
+              .setStatusCode(200)
+              .putHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream")
+              .send("Service health is OK");
+          });
+        // end::Home_Health[]
+
+
         // tag::Dokument_Get[]
         routerBuilder.operation("Dokument_Get")
           .handler(BodyHandler.create().setUploadsDirectory(UPLOADDIR).setBodyLimit(-1L))

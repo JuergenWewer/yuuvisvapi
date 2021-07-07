@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: yuuvis-api
-        image: jw-cloud.org:8443/yuuvis-v-api:2.3.0-SNAPSHOT
+        image: jw-cloud.org:8443/yuuvis-v-api:2.4.0-SNAPSHOT
         ports:
         - containerPort: 8080
         env:
