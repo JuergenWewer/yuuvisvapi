@@ -567,6 +567,9 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject systemObject = new JsonObject();
           systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
           properties.put("system:objectTypeId",systemObject);
+          JsonObject clientSystem = new JsonObject();
+          clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+          properties.put("appClientsystem:leadingTypeId", clientSystem);
           //vorname, nachname
           JsonObject clienttitle = new JsonObject();
           clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
@@ -736,6 +739,9 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
             properties.put("system:objectTypeId",systemObject);
+            JsonObject clientSystem = new JsonObject();
+            clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+            properties.put("appClientsystem:leadingTypeId", clientSystem);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
             clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
@@ -1006,6 +1012,9 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
+            JsonObject clientSystem = new JsonObject();
+            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
+            properties.put("appClientsystem:leadingTypeId", clientSystem);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
             clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
@@ -1123,6 +1132,9 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
+            JsonObject clientSystem = new JsonObject();
+            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
+            properties.put("appClientsystem:leadingTypeId", clientSystem);
             //vorname, nachname
             JsonObject clienttitle = new JsonObject();
             clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
@@ -1539,6 +1551,9 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject systemObject = new JsonObject();
     systemObject.put("value", "" + TABLENAME  +  ":" + "fallakteneodokument");
     properties.put("system:objectTypeId", systemObject);
+    JsonObject clientSystem = new JsonObject();
+    clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneodokument");
+    properties.put("appClientsystem:leadingTypeId", clientSystem);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);
@@ -1627,6 +1642,9 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject systemObject = new JsonObject();
     systemObject.put("value", "" + TABLENAME  +  ":" + "klientakteneodokument");
     properties.put("system:objectTypeId", systemObject);
+    JsonObject clientSystem = new JsonObject();
+    clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneodokument");
+    properties.put("appClientsystem:leadingTypeId", clientSystem);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);

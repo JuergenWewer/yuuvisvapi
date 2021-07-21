@@ -214,6 +214,9 @@ paths:
                   type: string
                   format: binary
                   nullable: true
+            encoding:
+              File:
+                contentType: application/pdf, image/jpeg, application/octet-stream
       responses:
         '200':
           description: Dokument erfolgreich im enaio® angelegt.
@@ -568,7 +571,6 @@ components:
   schemas:
     Dokument:
       type: object
-      additionalProperties: false
       properties:
         eDokumentenID:
           type: string
@@ -602,7 +604,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/PersonBase'
         - type: object
-          additionalProperties: false
           properties:
             kennung:
               type: string
@@ -610,7 +611,6 @@ components:
     PersonBase:
       type: object
       description: ' '
-      additionalProperties: false
       properties:
         vorname:
           type: string
@@ -622,7 +622,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/PersonBase'
         - type: object
-          additionalProperties: false
           properties:
             adresse:
               type: string
@@ -631,7 +630,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Dokument'
         - type: object
-          additionalProperties: false
           properties:
             klient:
               nullable: true
@@ -641,7 +639,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/PersonBaseExtended'
         - type: object
-          additionalProperties: false
           properties:
             adresse:
               type: string
@@ -650,7 +647,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/PersonBase'
         - type: object
-          additionalProperties: false
           properties:
             id:
               type: string
@@ -660,7 +656,6 @@ components:
               nullable: true
     Fallakte:
       type: object
-      additionalProperties: false
       properties:
         eAktenID:
           type: string
@@ -684,7 +679,6 @@ components:
             - $ref: '#/components/schemas/Unterhaltspflichtiger'
     Vorgang:
       type: object
-      additionalProperties: false
       properties:
         aktenzeichen:
           type: string
@@ -720,20 +714,16 @@ components:
       allOf:
         - $ref: '#/components/schemas/PersonBaseExtended'
         - type: object
-          additionalProperties: false
     Leistungsempfaenger:
       allOf:
         - $ref: '#/components/schemas/PersonBaseExtended'
         - type: object
-          additionalProperties: false
     Unterhaltspflichtiger:
       allOf:
         - $ref: '#/components/schemas/PersonBaseExtended'
         - type: object
-          additionalProperties: false
     Klientakte:
       type: object
-      additionalProperties: false
       properties:
         eAktenID:
           type: string

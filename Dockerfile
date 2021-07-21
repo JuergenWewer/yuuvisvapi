@@ -11,7 +11,7 @@ RUN mkdir /file-uploads
 RUN chmod 777 /file-uploads
 
 COPY src/main/resources/dist /src/main/resources/dist
-COPY target/yuuvis-v-api-2.4.0-SNAPSHOT-fat.jar /api/app.jar
+COPY target/yuuvis-v-api-2.5.0-SNAPSHOT-fat.jar /api/app.jar
 
 USER 1001
 
