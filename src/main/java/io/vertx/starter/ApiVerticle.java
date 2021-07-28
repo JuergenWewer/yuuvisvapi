@@ -567,17 +567,17 @@ public class ApiVerticle extends AbstractVerticle {
           JsonObject systemObject = new JsonObject();
           systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
           properties.put("system:objectTypeId",systemObject);
-          JsonObject clientSystem = new JsonObject();
-          clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
-          properties.put("appClientsystem:leadingTypeId", clientSystem);
-          //vorname, nachname
-          JsonObject clienttitle = new JsonObject();
-          clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
-          properties.put("clienttitle",clienttitle);
-          //gebdatum
-          JsonObject clientdescription = new JsonObject();
-          clientdescription.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
-          properties.put("clientdescription",clientdescription);
+//          JsonObject clientSystem = new JsonObject();
+//          clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+//          properties.put("appClientsystem:leadingTypeId", clientSystem);
+//          //vorname, nachname
+//          JsonObject clienttitle = new JsonObject();
+//          clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
+//          properties.put("clienttitle",clienttitle);
+//          //gebdatum
+//          JsonObject clientdescription = new JsonObject();
+//          clientdescription.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
+//          properties.put("clientdescription",clientdescription);
 
           JsonObject aktenzeichen = new JsonObject();
           aktenzeichen.put("value",requestBody.getJsonObject("vorgang").getString("aktenzeichen"));
@@ -739,17 +739,17 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "fallakteneo");
             properties.put("system:objectTypeId",systemObject);
-            JsonObject clientSystem = new JsonObject();
-            clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
-            properties.put("appClientsystem:leadingTypeId", clientSystem);
-            //vorname, nachname
-            JsonObject clienttitle = new JsonObject();
-            clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
-            properties.put("clienttitle",clienttitle);
-            //gebdatum
-            JsonObject clientdescription = new JsonObject();
-            clientdescription.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
-            properties.put("clientdescription",clientdescription);
+//            JsonObject clientSystem = new JsonObject();
+//            clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneo");
+//            properties.put("appClientsystem:leadingTypeId", clientSystem);
+//            //vorname, nachname
+//            JsonObject clienttitle = new JsonObject();
+//            clienttitle.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("vorname")+", "+requestBody.getJsonObject("leistungsempfaenger").getString("nachname"));
+//            properties.put("clienttitle",clienttitle);
+//            //gebdatum
+//            JsonObject clientdescription = new JsonObject();
+//            clientdescription.put("value",requestBody.getJsonObject("leistungsempfaenger").getString("geburtsdatum"));
+//            properties.put("clientdescription",clientdescription);
 
             JsonObject aktenzeichen = new JsonObject();
             aktenzeichen.put("value",requestBody.getJsonObject("vorgang").getString("aktenzeichen"));
@@ -1012,17 +1012,17 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
-            JsonObject clientSystem = new JsonObject();
-            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
-            properties.put("appClientsystem:leadingTypeId", clientSystem);
-            //vorname, nachname
-            JsonObject clienttitle = new JsonObject();
-            clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
-            properties.put("clienttitle",clienttitle);
-            //gebdatum
-            JsonObject clientdescription = new JsonObject();
-            clientdescription.put("value",requestBody.getJsonObject("klient").getString("geburtsdatum"));
-            properties.put("clientdescription",clientdescription);
+//            JsonObject clientSystem = new JsonObject();
+//            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
+//            properties.put("appClientsystem:leadingTypeId", clientSystem);
+//            //vorname, nachname
+//            JsonObject clienttitle = new JsonObject();
+//            clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
+//            properties.put("clienttitle",clienttitle);
+//            //gebdatum
+//            JsonObject clientdescription = new JsonObject();
+//            clientdescription.put("value",requestBody.getJsonObject("klient").getString("geburtsdatum"));
+//            properties.put("clientdescription",clientdescription);
 
             JsonObject vorname = new JsonObject();
             vorname.put("value",requestBody.getJsonObject("klient").getString("vorname"));
@@ -1132,17 +1132,17 @@ public class ApiVerticle extends AbstractVerticle {
             JsonObject systemObject = new JsonObject();
             systemObject.put("value","" + TABLENAME  +  ":" + "klientakteneo");
             properties.put("system:objectTypeId",systemObject);
-            JsonObject clientSystem = new JsonObject();
-            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
-            properties.put("appClientsystem:leadingTypeId", clientSystem);
-            //vorname, nachname
-            JsonObject clienttitle = new JsonObject();
-            clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
-            properties.put("clienttitle",clienttitle);
-            //gebdatum
-            JsonObject clientdescription = new JsonObject();
-            clientdescription.put("value",requestBody.getJsonObject("klient").getString("geburtsdatum"));
-            properties.put("clientdescription",clientdescription);
+//            JsonObject clientSystem = new JsonObject();
+//            clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneo");
+//            properties.put("appClientsystem:leadingTypeId", clientSystem);
+//            //vorname, nachname
+//            JsonObject clienttitle = new JsonObject();
+//            clienttitle.put("value",requestBody.getJsonObject("klient").getString("vorname")+", "+requestBody.getJsonObject("klient").getString("nachname"));
+//            properties.put("clienttitle",clienttitle);
+//            //gebdatum
+//            JsonObject clientdescription = new JsonObject();
+//            clientdescription.put("value",requestBody.getJsonObject("klient").getString("geburtsdatum"));
+//            properties.put("clientdescription",clientdescription);
 
             JsonObject vorname = new JsonObject();
             vorname.put("value",requestBody.getJsonObject("klient").getString("vorname"));
@@ -1551,20 +1551,20 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject systemObject = new JsonObject();
     systemObject.put("value", "" + TABLENAME  +  ":" + "fallakteneodokument");
     properties.put("system:objectTypeId", systemObject);
-    JsonObject clientSystem = new JsonObject();
-    clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneodokument");
-    properties.put("appClientsystem:leadingTypeId", clientSystem);
+//    JsonObject clientSystem = new JsonObject();
+//    clientSystem.put("value","" + TABLENAME  +  ":" + "fallakteneodokument");
+//    properties.put("appClientsystem:leadingTypeId", clientSystem);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);
-    //vorname, nachname
-    JsonObject clienttitle = new JsonObject();
-    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
-    properties.put("clienttitle", clienttitle);
-    //prosozDateiname
-    JsonObject clientdescription = new JsonObject();
-    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
-    properties.put("clientdescription", clientdescription);
+//    //vorname, nachname
+//    JsonObject clienttitle = new JsonObject();
+//    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
+//    properties.put("clienttitle", clienttitle);
+//    //prosozDateiname
+//    JsonObject clientdescription = new JsonObject();
+//    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
+//    properties.put("clientdescription", clientdescription);
 
     JsonObject edokumentenid = new JsonObject();
     edokumentenid.put("value",  requestBody.getString("Dokument.EDokumentenID"));
@@ -1642,20 +1642,20 @@ public class ApiVerticle extends AbstractVerticle {
     JsonObject systemObject = new JsonObject();
     systemObject.put("value", "" + TABLENAME  +  ":" + "klientakteneodokument");
     properties.put("system:objectTypeId", systemObject);
-    JsonObject clientSystem = new JsonObject();
-    clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneodokument");
-    properties.put("appClientsystem:leadingTypeId", clientSystem);
+//    JsonObject clientSystem = new JsonObject();
+//    clientSystem.put("value","" + TABLENAME  +  ":" + "klientakteneodokument");
+//    properties.put("appClientsystem:leadingTypeId", clientSystem);
     JsonObject systemparentId = new JsonObject();
     systemparentId.put("value", folderID);
     properties.put("system:parentId", systemparentId);
-    //vorname, nachname
-    JsonObject clienttitle = new JsonObject();
-    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
-    properties.put("clienttitle", clienttitle);
-    //prosozDateiname
-    JsonObject clientdescription = new JsonObject();
-    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
-    properties.put("clientdescription", clientdescription);
+//    //vorname, nachname
+//    JsonObject clienttitle = new JsonObject();
+//    clienttitle.put("value", requestBody.getString("Dokument.Sachbearbeiter.Vorname") + ", " + requestBody.getString("Dokument.Sachbearbeiter.Nachname"));
+//    properties.put("clienttitle", clienttitle);
+//    //prosozDateiname
+//    JsonObject clientdescription = new JsonObject();
+//    clientdescription.put("value", requestBody.getString("Dokument.ProsozDateiname"));
+//    properties.put("clientdescription", clientdescription);
 
     JsonObject edokumentenid = new JsonObject();
     edokumentenid.put("value",  requestBody.getString("Dokument.EDokumentenID"));
