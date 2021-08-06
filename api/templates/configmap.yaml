@@ -4,5 +4,5 @@ metadata:
   name: yuuvisapiconfigmap
   namespace: yuuvis
 data:
-  tenant: yuuvistest
+  tenant: '{{ .Values.tenant }}'
   serverurl: '{{ .Values.serverurl }}{{ if .Values.serverport }}:{{ .Values.serverport }}{{ end }}'

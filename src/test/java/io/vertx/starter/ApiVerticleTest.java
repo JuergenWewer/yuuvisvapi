@@ -28,11 +28,11 @@ public class ApiVerticleTest {
   private CountDownLatch producerReadyLatch = new CountDownLatch(1);
   private static Vertx vertx = Vertx.vertx();
 
-  private String apiurl = "localhost";
-  private int apiport = 8080;
+//  private String apiurl = "localhost";
+//  private int apiport = 8080;
 
-//  private String apiurl = "10.211.55.4";
-//  private int apiport = 30036;
+  private String apiurl = "10.211.55.4";
+  private int apiport = 30036;
 
 
   @BeforeEach
